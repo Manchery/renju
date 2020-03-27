@@ -14,8 +14,11 @@ bool makeMove(point pos, int player)
 	return true;
 }
 
-bool unMakeMove()
+bool unMakeMove(int player)
 {
-	//撤销落子操作（chessboard[i][j]=0）
+	//撤销落子操作
+	point pos = moveTrace[player].back();
+	moveTrace[player].pop_back();
+	chessBoard[pos.x][pos.y] = blank;
 	return true;
 }

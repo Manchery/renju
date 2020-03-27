@@ -8,6 +8,6 @@
 bool makeMove(int x, int y, int player);//执行走法
 bool makeMove(point pos, int player);//执行走法
 
-bool unMakeMove();//撤销走法
+bool unMakeMove(int player);//撤销走法
 
 #endif

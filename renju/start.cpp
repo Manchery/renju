@@ -10,7 +10,8 @@ int main()
 	user = agent == black ? white : black;
 
 	if (agent == black) {
-		point agentMove = randomMove();
+		//point agentMove = randomMove();
+		point agentMove = point(8, 8);
 		makeMove(agentMove, agent);
 	}
 	while (true) {
@@ -20,9 +21,9 @@ int main()
 			winner = user; break;
 		}
 		userWaiting();
-		point agentMove = randomMove();
+		point agentMove = searchMove();
 		makeMove(agentMove, agent);
-		if (gameover(userMove, user)) {
+		if (gameover(agentMove, agent)) {
 			winner = agent; break;
 		}
 	}

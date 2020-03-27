@@ -2,6 +2,9 @@
 #define _CREATEMOVES_
 //走法生成器
 
-int createMoves(int player);
+#include "define.h"
+#include <vector>
+
+void createMoves(int player, std::vector<point> &sorted);
 
 #endif

@@ -48,7 +48,7 @@ point getUserMove()
 		if (!fail) {
 			int x=-1, y=-1;
 			sin >> x >> y;
-			if (!inboard(x, y))
+			if (!inboard(x, y) || chessBoard[x][y]!=blank)
 				fail = true;
 			else
 				return point(x, y);

@@ -1,7 +1,7 @@
 #include "gameover.h"
 
-static constexpr int Dx[] = { 1,0,1,-1 };
-static constexpr int Dy[] = { 0,1,1,1 };
+static constexpr int Dx[] = { 1,0,1,1 };
+static constexpr int Dy[] = { 0,1,1,-1 };
 
 bool gameover(point pos, int player)
 {
