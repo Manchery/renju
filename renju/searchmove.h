@@ -4,4 +4,6 @@
 
 int searchMove();//ËÑË÷ºËÐÄ
 
+point randomMove();
+
 #endif

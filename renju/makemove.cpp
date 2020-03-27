@@ -1,8 +1,16 @@
 #include "define.h"
 #include "printchessboard.h"
-bool makeMove()
+#include "makemove.h"
+
+bool makeMove(int x, int y, int player)
 {
-	//Ö´ÐÐÂä×Ó²Ù×÷£¨chessboard[i][j]=1 & chessboard[i][j]=2£©
+	return makeMove(point(x, y), player);
+}
+
+bool makeMove(point pos, int player)
+{
+	chessBoard[pos.x][pos.y] = player;
+	moveTrace[player].push_back(pos);
 	return true;
 }
 

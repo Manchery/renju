@@ -3,14 +3,19 @@
 #define _DEFINE_
 //全局变量定义
 
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 #include <string>
-#include <math.h>
+#include <cmath>
 #include <iostream>
 #include <algorithm>
+#include <vector>
 #include <ctime>
-using namespace std;
+
+struct point {
+	int x, y;
+	point(int x=0, int y=0):x(x),y(y) {} 
+};
 
 #define blank 0		//空白点
 #define black 1		//黑方
@@ -20,7 +25,14 @@ using namespace std;
 
 #define GRID_NUM 16	//棋盘规模	
 extern int chessBoard[GRID_NUM][GRID_NUM]; //棋盘
-bool gameover(struct point node, int player); //判断是否游戏结束
+extern int winner;
+extern std::vector<point> moveTrace[3];
+
+extern int agent; // agent = black | white
+extern int user; // user = black | white, 与 agent 相反
+
+void clearAll();
+
 #endif
 
 
