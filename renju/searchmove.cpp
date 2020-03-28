@@ -52,9 +52,11 @@ std::pair<point, int> MiniMax(int current, int depth, int alpha, int beta) {
 				else
 					newv = MiniMax(opposite(current), depth - 1, alpha, beta).second;
 				if (newv > v || (newv == v && ran01())) // 增加随机性
-				//if (newv > v)
+				{
+					//if (newv > v)
 					v = newv, optMove = currentMove;
 					currentBest[(long long)idDepth - depth] = currentMove;
+				}
 				if (v >= beta) {
 					unMakeMove(current);
 					recordHashMap(depth, Upper, v, optMove);
@@ -82,9 +84,11 @@ std::pair<point, int> MiniMax(int current, int depth, int alpha, int beta) {
 				else
 					newv = MiniMax(opposite(current), depth - 1, alpha, beta).second;
 				if (newv < v || (newv == v && ran01())) // 增加随机性
-				//if (newv < v)
+				{
+					//if (newv < v)
 					v = newv, optMove = currentMove;
 					currentBest[(long long)idDepth - depth] = currentMove;
+				}
 				if (v <= alpha) {
 					unMakeMove(current);
 					recordHashMap(depth, Lower, v, optMove);
@@ -131,7 +135,6 @@ std::pair<point, int> idSearch(int depth, unsigned timeout)
 		pre = clock();
 		res = MiniMax(agent, i, -inf, inf);
 		if (res.second >= winValue) return res;
-		currentBest[(long long)i - 1] = res.first;
 		total += clock() - pre;
 		if (total >= timeout) break;
 	}

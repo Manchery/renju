@@ -1,4 +1,4 @@
-#include "define.h"
+ï»¿#include "define.h"
 #include "createmoves.h"
 #include "evaluate.h"
 #include <algorithm>
@@ -11,12 +11,26 @@ std::vector<point> createMoves(int player, int depth)
 	if (createdMoves.find(zobrist) != createdMoves.end()) return createdMoves[zobrist];
 	int n = GRID_NUM - 1;
 	int eval[GRID_NUM][GRID_NUM];
-	vector<point> moves;
-	for (int i=1;i<=n;i++)
+	vector<point> moves, defends;
+
+	//defends
+	for (int i = 1; i <= n; i++)
+		for (int j = 1; j <= n; j++)
+			if (chessBoard[i][j] == blank) {
+				defends.push_back(point(i, j));
+				eval[i][j] = evaluateStep(opposite(player), i, j);
+			}
+	sort(defends.begin(), defends.end(), [&](const point& A, const point& B) {
+		return eval[A.x][A.y] > eval[B.x][B.y];
+		});
+	while (defends.size() > MOVE_NUM / 2) defends.pop_back();
+
+	//attacks + minimax
+	for (int i = 1; i <= n; i++)
 		for (int j = 1; j <= n; j++)
 			if (chessBoard[i][j] == blank) {
 				moves.push_back(point(i, j));
-				eval[i][j] = max(evaluateStep(black, i, j), evaluateStep(white, i, j));
+				eval[i][j] = evaluateStep(player, i, j);
 			}
 	if (depth < currentBest.size())
 	{
@@ -26,8 +40,17 @@ std::vector<point> createMoves(int player, int depth)
 	sort(moves.begin(), moves.end(), [&](const point &A, const point &B) {
 		return eval[A.x][A.y] > eval[B.x][B.y];
 	});
-	while (moves.size() > MOVE_NUM) moves.pop_back();
+	while (moves.size() > (MOVE_NUM - MOVE_NUM / 2)) moves.pop_back();
+
+	//merge
+	for (auto it : defends)
+	{
+		moves.push_back(it);
+	}
+	sort(moves.begin(), moves.end(), [&](const point& A, const point& B) {
+		return eval[A.x][A.y] > eval[B.x][B.y];
+		});
 	createdMoves[zobrist] = moves;
 	return moves;
 }
-//²éÕÒËùÓĞºÏ·¨Âä×Óµã¡£¶ÔÓÚÎå×ÓÆåÀ´Ëµ£¬ÆåÅÌÉÏµÄ¿Õ°×µã¾ùÎª¿ÉĞĞ×ß·¨¡£
+//æŸ¥æ‰¾æ‰€æœ‰åˆæ³•è½å­ç‚¹ã€‚å¯¹äºäº”å­æ£‹æ¥è¯´ï¼Œæ£‹ç›˜ä¸Šçš„ç©ºç™½ç‚¹å‡ä¸ºå¯è¡Œèµ°æ³•ã€‚
