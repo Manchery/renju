@@ -23,7 +23,7 @@ int gameover()//еп╤ойг╥Ясно╥╫АйЬ
 	for (int i = 1; i < GRID_NUM; i++) {
 		for (int j = 1; j < GRID_NUM; j++) {
 			for (int k = 0; k < 4; k++) {
-				if (!chessBoard[i][j]) continue;
+			//	if (!chessBoard[i][j]) continue;
 				bool same = 1; int dx = Dx[k], dy = Dy[k];
 				for (int v = -2; v <= 2; v++)
 					same &= (inboard(i + dx * v, j + dy * v) && chessBoard[i + dx * v][j + dy * v] == chessBoard[i][j]);

@@ -12,7 +12,7 @@
 #include <vector>
 #include <ctime>
 
-#define DBG_LOG
+//#define DBG_LOG
 
 struct point {
 	int x, y;

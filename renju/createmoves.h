@@ -8,7 +8,11 @@
 #include <unordered_map>
 #include <vector>
 
+<<<<<<< Updated upstream
 #define MOVE_NUM (5U)
+=======
+#define MOVE_NUM (6U) 
+>>>>>>> Stashed changes
 
 extern std::unordered_map<hash_t, std::vector<point>> createdMoves;
 

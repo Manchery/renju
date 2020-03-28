@@ -48,13 +48,25 @@ std::pair<point, int> MiniMax(int current, int depth, int alpha, int beta) {
 
 			if (makeMove(currentMove, current)) {
 				if (gameover(currentMove, current))
+<<<<<<< Updated upstream
 					newv = winValue;
+=======
+				{
+					newv = winValue; // / (idDepth - depth + 1); // 考虑深度的影响，避免AI盲目乐观
+#ifdef DBG_LOG
+					gameover(currentMove, current);
+#endif // DBG_LOG
+				}
+>>>>>>> Stashed changes
 				else
 					newv = MiniMax(opposite(current), depth - 1, alpha, beta).second;
 				if (newv > v || (newv == v && ran01())) // 增加随机性
-				//if (newv > v)
+				{
+					//if (newv > v)
 					v = newv, optMove = currentMove;
 					currentBest[(long long)idDepth - depth] = currentMove;
+					// currentBest[(long long)depth - 1] = optMove;
+				}
 				if (v >= beta) {
 					unMakeMove(current);
 					recordHashMap(depth, Upper, v, optMove);
@@ -82,9 +94,12 @@ std::pair<point, int> MiniMax(int current, int depth, int alpha, int beta) {
 				else
 					newv = MiniMax(opposite(current), depth - 1, alpha, beta).second;
 				if (newv < v || (newv == v && ran01())) // 增加随机性
-				//if (newv < v)
+				{
+					//if (newv < v)
 					v = newv, optMove = currentMove;
 					currentBest[(long long)idDepth - depth] = currentMove;
+					//currentBest[(long long)depth - 1] = currentMove;
+				}
 				if (v <= alpha) {
 					unMakeMove(current);
 					recordHashMap(depth, Lower, v, optMove);
@@ -131,9 +146,8 @@ std::pair<point, int> idSearch(int depth, unsigned timeout)
 		pre = clock();
 		res = MiniMax(agent, i, -inf, inf);
 		if (res.second >= winValue) return res;
-		currentBest[(long long)i - 1] = res.first;
 		total += clock() - pre;
-		if (total >= timeout) break;
+//		if (total >= timeout) break;
 	}
 	return res;
 }
