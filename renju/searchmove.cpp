@@ -48,7 +48,12 @@ std::pair<point, int> MiniMax(int current, int depth, int alpha, int beta) {
 
 			if (makeMove(currentMove, current)) {
 				if (gameover(currentMove, current))
+				{
 					newv = winValue;
+#ifdef DBG_LOG
+					gameover(currentMove, current);
+#endif // DBG_LOG
+				}
 				else
 					newv = MiniMax(opposite(current), depth - 1, alpha, beta).second;
 				if (newv > v || (newv == v && ran01())) // 增加随机性
@@ -89,6 +94,11 @@ std::pair<point, int> MiniMax(int current, int depth, int alpha, int beta) {
 					unMakeMove(current);
 					recordHashMap(depth, Lower, v, optMove);
 					return make_pair(optMove, v);
+#ifdef DBG_LOG
+				if (currentMove == point(6,5) || currentMove == point(6,9)) {
+					int x;
+				}
+#endif // 
 				}
 				beta = min(beta, v);
 				unMakeMove(current);
