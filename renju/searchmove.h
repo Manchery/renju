@@ -7,7 +7,7 @@
 #include "hash.h"
 #include <algorithm>
 
-#define SEARCH_DEPTH (10)
+#define SEARCH_DEPTH (12)
 
 std::pair<point, int> searchMove(); //ËÑË÷ºËÐÄ
 

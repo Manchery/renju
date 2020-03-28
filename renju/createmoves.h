@@ -8,7 +8,7 @@
 #include <unordered_map>
 #include <vector>
 
-#define MOVE_NUM (7U)
+#define MOVE_NUM (5U)
 
 extern std::unordered_map<hash_t, std::vector<point>> createdMoves;
 

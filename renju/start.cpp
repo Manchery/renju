@@ -17,8 +17,8 @@ int main()
 	if (agent == black) {
 		//point agentMove = randomMove();
 		point agentMove = point(8, 8);
-		agentMove.x += rand() % 3 - 1;
-		agentMove.y += rand() % 3 - 1;
+		// agentMove.x += rand() % 3 - 1;
+		// agentMove.y += rand() % 3 - 1;
 		makeMove(agentMove, agent);
 		timeStamp++;
 	}
