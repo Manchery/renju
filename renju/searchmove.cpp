@@ -9,8 +9,6 @@
 #include <cmath>
 using namespace std;
 
-const int SEARCH_DEPTH = 10;
-
 std::pair<point, int> searchMove()
 {
 	hashMap.clear();
@@ -38,9 +36,8 @@ std::pair<point, int> MiniMax(int current, int depth, int alpha, int beta) {
 		return make_pair(point(), v);
 	}
 
-	vector<point> moveList;
-	createMoves(current, moveList);
-	int exploreLen = min(7U, moveList.size());
+	vector<point> moveList = createMoves(current);
+	int exploreLen = moveList.size();
 
 	if (current == agent) { // ¼«´óËÑË÷
 		point optMove;

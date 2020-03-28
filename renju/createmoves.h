@@ -3,8 +3,15 @@
 //走法生成器
 
 #include "define.h"
+#include "hash.h"
+#include <vector>
+#include <unordered_map>
 #include <vector>
 
-void createMoves(int player, std::vector<point> &sorted);
+#define MOVE_NUM (7U)
+
+extern std::unordered_map<hash_t, std::vector<point>> createdMoves;
+
+std::vector<point> createMoves(int player);
 
 #endif
