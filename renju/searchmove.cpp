@@ -11,8 +11,7 @@ using namespace std;
 
 std::pair<point, int> searchMove()
 {
-	hashMap.clear();
-	return MiniMax(agent, SEARCH_DEPTH, -inf, inf);
+	return idSearch();
 }
 
 static int ran01() { static int x = 31253125; x += (x << 4) + 1; return x & 65536; }
@@ -36,7 +35,7 @@ std::pair<point, int> MiniMax(int current, int depth, int alpha, int beta) {
 		return make_pair(point(), v);
 	}
 
-	vector<point> moveList = createMoves(current);
+	vector<point> moveList = createMoves(current, idDepth - depth);
 	int exploreLen = moveList.size();
 
 	if (current == agent) { // 极大搜索
@@ -55,6 +54,7 @@ std::pair<point, int> MiniMax(int current, int depth, int alpha, int beta) {
 				if (newv > v || (newv == v && ran01())) // 增加随机性
 				//if (newv > v)
 					v = newv, optMove = currentMove;
+					currentBest[(long long)idDepth - depth] = currentMove;
 				if (v >= beta) {
 					unMakeMove(current);
 					recordHashMap(depth, Upper, v, optMove);
@@ -84,6 +84,7 @@ std::pair<point, int> MiniMax(int current, int depth, int alpha, int beta) {
 				if (newv < v || (newv == v && ran01())) // 增加随机性
 				//if (newv < v)
 					v = newv, optMove = currentMove;
+					currentBest[(long long)idDepth - depth] = currentMove;
 				if (v <= alpha) {
 					unMakeMove(current);
 					recordHashMap(depth, Lower, v, optMove);
@@ -115,6 +116,26 @@ std::pair<point, int> findHashMap(int current, int depth, int alpha, int beta) {
 		}
 	}
 	return std::make_pair(node.move, hashUnknowValue);
+}
+
+std::pair<point, int> idSearch(int depth, unsigned timeout)
+{
+	unsigned total = 0, pre = 0;
+	std::pair<point, int> res;
+	currentBest.clear();
+	for (int i = 1; i <= depth; i++)
+	{
+		idDepth = i;
+		currentBest.push_back(point());
+		hashMap.clear();
+		pre = clock();
+		res = MiniMax(agent, i, -inf, inf);
+		if (res.second >= winValue) return res;
+		currentBest[(long long)i - 1] = res.first;
+		total += clock() - pre;
+		if (total >= timeout) break;
+	}
+	return res;
 }
 
 void recordHashMap(int depth, hashFlag flag, int value, point move) {
