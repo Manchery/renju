@@ -5,7 +5,7 @@
 
 int getTheIntitative();
 
-point getUserMove();
+point getUserMove(int eval);
 
 void outputWinner();
 

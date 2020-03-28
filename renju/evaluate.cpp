@@ -1,6 +1,7 @@
 #include "define.h"
 #include "evaluate.h"
 #include <algorithm>
+#include <cmath>
 using namespace std;
 
 const int cheng[6][3] = {
@@ -21,13 +22,33 @@ const int chong[6][3] = {
 {20,200,8000} // 冲 5
 };
 
+const int xianShouCheng[6][3] = {
+{0,0,0},
+{0,0,0},
+{0,0,0},
+{0,0,5000}, // 先手成双活3
+{0,500000,500000}, // 先手成活4 必赢
+{10000000,10000000,10000000},
+};
+
+const int xianShouChong[6][3] = {
+{0,0,0},
+{0,0,0},
+{0,0,0},
+{0,0,0},
+{0,2000,500000}, // 先手冲双活4 必赢
+{10000000,10000000,10000000}, // 先手冲 5 必赢
+};
+
+
+
 int Evaluate(int current) { //局面估值算法，返回估值
-	int res = evaluate(agent) - evaluate(user);
+	int res = evaluate(agent, current) - evaluate(user, current);
 	if (current == user) res -= 500;
 	return res;
 }
 
-int evaluate(int player)//估值算法，返回估值
+int evaluate(int player, int current)//估值算法，返回估值
 {
 	const int n = GRID_NUM-1;
 	int eval = 0;
@@ -44,9 +65,11 @@ int evaluate(int player)//估值算法，返回估值
 				int leftUnblocked = !(l - 1 == 0 || chessBoard[i][l - 1] == opposite(player));
 				int rightUnblocked = !(r + 1 == n + 1 || chessBoard[i][r + 1] == opposite(player));
 				eval += cheng[min(r - l + 1, 5)][leftUnblocked + rightUnblocked];
+				eval += (player == current)*xianShouCheng[min(r - l + 1, 5)][leftUnblocked + rightUnblocked];
 				// 冲
 				if (lastR != -1 && lastR == l - 2 && chessBoard[i][l - 1] == blank) {
 					eval += chong[min(r - lastL + 1, 5)][lastLB + rightUnblocked];
+					eval += (player == current)*xianShouChong[min(r - lastL + 1, 5)][lastLB + rightUnblocked];
 				}
 				lastL = l; lastR = r; lastLB = leftUnblocked; lastRB = rightUnblocked;
 				j = r;
@@ -66,9 +89,11 @@ int evaluate(int player)//估值算法，返回估值
 				int leftUnblocked = !(l - 1 == 0 || chessBoard[l - 1][j] == opposite(player));
 				int rightUnblocked = !(r + 1 == n + 1 || chessBoard[r + 1][j] == opposite(player));
 				eval += cheng[min(r - l + 1, 5)][leftUnblocked + rightUnblocked];
+				eval += (player == current)*xianShouCheng[min(r - l + 1, 5)][leftUnblocked + rightUnblocked];
 				// 冲
 				if (lastR != -1 && lastR == l - 2 && chessBoard[l - 1][j] == blank) {
 					eval += chong[min(r - lastL + 1, 5)][lastLB + rightUnblocked];
+					eval += (player == current)*xianShouChong[min(r - lastL + 1, 5)][lastLB + rightUnblocked];
 				}
 				lastL = l; lastR = r; lastLB = leftUnblocked; lastRB = rightUnblocked;
 				i = r;
@@ -89,9 +114,11 @@ int evaluate(int player)//估值算法，返回估值
 				int leftUnblocked = !(l - 1 == minJ - 1 || chessBoard[s - (l - 1)][l - 1] == opposite(player));
 				int rightUnblocked = !(r + 1 == maxJ + 1 || chessBoard[s - (r + 1)][r + 1] == opposite(player));
 				eval += cheng[min(r - l + 1, 5)][leftUnblocked + rightUnblocked];
+				eval += (player == current)*xianShouCheng[min(r - l + 1, 5)][leftUnblocked + rightUnblocked];
 				// 冲
 				if (lastR != -1 && lastR == l - 2 && chessBoard[s - (l - 1)][l - 1] == blank) {
 					eval += chong[min(r - lastL + 1, 5)][lastLB + rightUnblocked];
+					eval += (player == current)*xianShouChong[min(r - lastL + 1, 5)][lastLB + rightUnblocked];
 				}
 				lastL = l; lastR = r; lastLB = leftUnblocked; lastRB = rightUnblocked;
 				j = r;
@@ -112,9 +139,11 @@ int evaluate(int player)//估值算法，返回估值
 				int leftUnblocked = !(l - 1 == minJ - 1 || chessBoard[s + (l - 1)][l - 1] == opposite(player));
 				int rightUnblocked = !(r + 1 == maxJ + 1 || chessBoard[s + (r + 1)][r + 1] == opposite(player));
 				eval += cheng[min(r - l + 1, 5)][leftUnblocked + rightUnblocked];
+				eval += (player == current)*xianShouCheng[min(r - l + 1, 5)][leftUnblocked + rightUnblocked];
 				// 冲
 				if (lastR != -1 && lastR == l - 2 && chessBoard[s + (l - 1)][l - 1] == blank) {
 					eval += chong[min(r - lastL + 1, 5)][lastLB + rightUnblocked];
+					eval += (player == current)*xianShouChong[min(r - lastL + 1, 5)][lastLB + rightUnblocked];
 				}
 				lastL = l; lastR = r; lastLB = leftUnblocked; lastRB = rightUnblocked;
 				j = r;

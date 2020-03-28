@@ -1,4 +1,7 @@
 #include "define.h"
+#include "evaluate.h"
+#include <iostream>
+using namespace std;
 
 void judge(int i, int j)
 {

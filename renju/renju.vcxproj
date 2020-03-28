@@ -146,6 +146,7 @@
     <ClCompile Include="define.cpp" />
     <ClCompile Include="evaluate.cpp" />
     <ClCompile Include="gameover.cpp" />
+    <ClCompile Include="hash.cpp" />
     <ClCompile Include="io.cpp" />
     <ClCompile Include="makemove.cpp" />
     <ClCompile Include="printchessboard.cpp" />
@@ -157,6 +158,7 @@
     <ClInclude Include="define.h" />
     <ClInclude Include="evaluate.h" />
     <ClInclude Include="gameover.h" />
+    <ClInclude Include="hash.h" />
     <ClInclude Include="io.h" />
     <ClInclude Include="makemove.h" />
     <ClInclude Include="printchessboard.h" />

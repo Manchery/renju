@@ -1,5 +1,6 @@
 #include "io.h"
 #include "printchessboard.h"
+#include "evaluate.h"
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -32,11 +33,12 @@ int getTheIntitative() {
 	}
 }
 
-point getUserMove()
+point getUserMove(int eval)
 {
 	system("cls");
 	cout << "*************五子棋人机对弈AI*************" << endl;
 	cout << endl; print(); cout << endl;
+	cout << (agent == black ? "黑" : "白") << "棋局面评估: " << ((eval > 0) ? "+" : "") << eval << endl << endl;
 	cout << "输入: move r c  表示落子点（r,c 分别表示行列）" << endl << endl;
 
 	while (true) {
