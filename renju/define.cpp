@@ -9,9 +9,11 @@ bool operator ==(const point &A, const point &B) {
 int chessBoard[GRID_NUM][GRID_NUM];//定义棋盘
 int winner = blank;
 std::vector<point> moveTrace[3];
+std::vector<point> moveRecord; // 棋谱记录
 
 int agent; // agent = black | white
 int user; // user = black | white, 与 agent 相反
+int getRecord; // 是否有棋谱
 
 int timeStamp;
 

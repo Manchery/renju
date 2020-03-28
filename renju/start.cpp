@@ -12,15 +12,36 @@ int main()
 	agent = getTheIntitative();
 	user = agent == black ? white : black;
 
-	if (agent == white) zobrist ^= whiteFirst;
+	if (winner = gameover())
+	{
+		outputWinner();
+		writeRecord();
+		return 0;
+	}
 
-	if (agent == black) {
-		//point agentMove = randomMove();
-		point agentMove = point(8, 8);
-		// agentMove.x += rand() % 3 - 1;
-		// agentMove.y += rand() % 3 - 1;
+	if (!getRecord)
+	{
+		if (agent == white) zobrist ^= whiteFirst;
+
+		if (agent == black) {
+			//point agentMove = randomMove();
+			point agentMove = point(8, 8);
+			// agentMove.x += rand() % 3 - 1;
+			// agentMove.y += rand() % 3 - 1;
+			makeMove(agentMove, agent);
+			timeStamp++;
+		}
+	}
+	else if ((agent + getRecord) % 2)
+	{
+		std::pair<point, int> searchResult = searchMove();
+		point agentMove = searchResult.first;
+		int eval = searchResult.second;
 		makeMove(agentMove, agent);
 		timeStamp++;
+		if (gameover(agentMove, agent)) {
+			winner = agent;
+		}
 	}
 
 	/*user = white; agent = black;
@@ -36,7 +57,7 @@ int main()
 	makeMove(point(10, 9), agent);*/
 
 	int eval = 0;
-	while (true) {
+	while (!winner) {
 	    point userMove = getUserMove(eval);
 		makeMove(userMove, user);
 		timeStamp++;
@@ -52,8 +73,10 @@ int main()
 		if (gameover(agentMove, agent)) {
 			winner = agent; break;
 		}
+		writeRecord();
 	}
 
 	outputWinner();
+	writeRecord();
 	return 0;
 }

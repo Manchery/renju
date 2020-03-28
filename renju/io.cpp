@@ -1,7 +1,9 @@
 #include "io.h"
 #include "printchessboard.h"
 #include "evaluate.h"
+#include "makemove.h"
 #include <iostream>
+#include <fstream>
 #include <sstream>
 #include <string>
 using namespace std;
@@ -14,12 +16,13 @@ void Trim(string & str)
 }
 
 int getTheIntitative() {
+	if (readRecord()) return agent;
 	system("cls");
 	cout << "*************五子棋人机对弈AI*************" << endl;
 	cout << endl; print(); cout << endl;
 	cout << "输入: newblack  电脑先手" << endl;
 	cout << "输入: newwhite  电脑后手" << endl << endl;
-	
+
 	while (true) {
 		string input;
 		getline(cin, input); Trim(input);
@@ -76,4 +79,51 @@ void userWaiting()
 	cout << "*************五子棋人机对弈AI*************" << endl;
 	cout << endl; print(); cout << endl;
 	cout << "电脑思考中..." << endl;
+}
+
+bool readRecord()
+{
+	ifstream fin(".\\record.txt");
+	fin >> agent;
+	if (!agent) return false;
+	if (agent)
+	{
+		cout << "检测到棋谱，是否读入？[Y/N]";// << endl;
+		string input;
+		getline(cin, input); Trim(input);
+		char ch = 'N';
+		if (input.length() > 0) ch = input[0];
+		if (!(ch == 'Y' || ch == 'y'))
+		{
+			return false;
+		}
+	}
+	int x, y, cur = agent;
+	while (!fin.eof() && fin.good())
+	{
+		fin >> x >> y;
+		if (makeMove(point(x, y), cur))
+		{
+			cur = opposite(cur);
+			getRecord++;
+			timeStamp++;
+		}
+	}
+
+	return true;
+}
+
+void writeRecord()
+{
+	ofstream fout(".\\record.txt");
+	if (!fout.is_open()) { 
+#ifdef DBG_LOG
+		cout << "棋谱文件不能正常读写." << endl;
+#endif // DBG_LOG
+		return; }
+	fout << agent << endl;
+	for (auto it : moveRecord)
+	{
+		fout << it.x << " " << it.y << endl;
+	}
 }

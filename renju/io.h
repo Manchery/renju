@@ -10,3 +10,7 @@ point getUserMove(int eval);
 void outputWinner();
 
 void userWaiting();
+
+bool readRecord();
+
+void writeRecord();

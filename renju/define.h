@@ -12,6 +12,8 @@
 #include <vector>
 #include <ctime>
 
+#define DBG_LOG
+
 struct point {
 	int x, y;
 	point(int x=0, int y=0):x(x),y(y) {} 
@@ -30,9 +32,11 @@ bool operator ==(const point &A, const point &B);
 extern int chessBoard[GRID_NUM][GRID_NUM]; //棋盘
 extern int winner;
 extern std::vector<point> moveTrace[3];
+extern std::vector<point> moveRecord; // 棋谱记录
 
 extern int agent; // agent = black | white
 extern int user; // user = black | white, 与 agent 相反
+extern int getRecord; //是否有棋谱
 
 extern int timeStamp;
 
