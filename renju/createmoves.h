@@ -12,6 +12,6 @@
 
 extern std::unordered_map<hash_t, std::vector<point>> createdMoves;
 
-std::vector<point> createMoves(int player);
+std::vector<point> createMoves(int player, int depth = 0);
 
 #endif

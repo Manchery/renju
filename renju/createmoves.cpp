@@ -6,7 +6,7 @@ using namespace std;
 
 std::unordered_map<hash_t, std::vector<point>> createdMoves;
 
-std::vector<point> createMoves(int player)
+std::vector<point> createMoves(int player, int depth)
 {
 	if (createdMoves.find(zobrist) != createdMoves.end()) return createdMoves[zobrist];
 	int n = GRID_NUM - 1;
@@ -18,6 +18,11 @@ std::vector<point> createMoves(int player)
 				moves.push_back(point(i, j));
 				eval[i][j] = max(evaluateStep(black, i, j), evaluateStep(white, i, j));
 			}
+	if (depth < currentBest.size())
+	{
+		auto& p = currentBest[depth];
+		eval[p.x][p.y] += winValue;
+	}
 	sort(moves.begin(), moves.end(), [&](const point &A, const point &B) {
 		return eval[A.x][A.y] > eval[B.x][B.y];
 	});

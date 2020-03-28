@@ -33,10 +33,13 @@ extern int chessBoard[GRID_NUM][GRID_NUM]; //棋盘
 extern int winner;
 extern std::vector<point> moveTrace[3];
 extern std::vector<point> moveRecord; // 棋谱记录
+extern std::vector<point> currentBest; // 迭代加深时的当前最优解
 
 extern int agent; // agent = black | white
 extern int user; // user = black | white, 与 agent 相反
+
 extern int getRecord; //是否有棋谱
+extern int idDepth; //迭代深度
 
 extern int timeStamp;
 
