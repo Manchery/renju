@@ -98,7 +98,7 @@ bool readRecord()
 			return false;
 		}
 	}
-	int x, y, cur = agent;
+	int x, y, cur = black;
 	while (!fin.eof() && fin.good())
 	{
 		fin >> x >> y;
