@@ -1,4 +1,5 @@
 #include "io.h"
+#include "hash.h"
 #include "printchessboard.h"
 #include "evaluate.h"
 #include "makemove.h"
@@ -98,6 +99,9 @@ bool readRecord()
 			return false;
 		}
 	}
+
+	if (agent == white) zobrist ^= whiteFirst;
+
 	int x, y, cur = black;
 	while (!fin.eof() && fin.good())
 	{

@@ -35,7 +35,7 @@ const int xianShouChong[6][3] = {
 {0,0,0},
 {0,0,0},
 {0,0,0},
-{0,0,0},
+{0,0,500000},
 {0,2000,500000}, // 先手冲双活4 必赢
 {10000000,10000000,10000000}, // 先手冲 5 必赢
 };
@@ -48,10 +48,13 @@ int Evaluate(int current) { //局面估值算法，返回估值
 	return res;
 }
 
+
+
 int evaluate(int player, int current)//估值算法，返回估值
 {
 	const int n = GRID_NUM-1;
 	int eval = 0;
+	int chengCnt[6][3]{}, chongCnt[6][3]{};
 	
 	// 水平
 	for (int i = 1; i <= n; i++) {
@@ -66,10 +69,12 @@ int evaluate(int player, int current)//估值算法，返回估值
 				int rightUnblocked = !(r + 1 == n + 1 || chessBoard[i][r + 1] == opposite(player));
 				eval += cheng[min(r - l + 1, 5)][leftUnblocked + rightUnblocked];
 				eval += (player == current)*xianShouCheng[min(r - l + 1, 5)][leftUnblocked + rightUnblocked];
+				chengCnt[min((r - l + 1), 5)][leftUnblocked + rightUnblocked]++;
 				// 冲
 				if (lastR != -1 && lastR == l - 2 && chessBoard[i][l - 1] == blank) {
 					eval += chong[min(r - lastL + 1, 5)][lastLB + rightUnblocked];
 					eval += (player == current)*xianShouChong[min(r - lastL + 1, 5)][lastLB + rightUnblocked];
+					chongCnt[min(r - lastL + 1, 5)][lastLB + rightUnblocked]++;
 				}
 				lastL = l; lastR = r; lastLB = leftUnblocked; lastRB = rightUnblocked;
 				j = r;
@@ -90,10 +95,12 @@ int evaluate(int player, int current)//估值算法，返回估值
 				int rightUnblocked = !(r + 1 == n + 1 || chessBoard[r + 1][j] == opposite(player));
 				eval += cheng[min(r - l + 1, 5)][leftUnblocked + rightUnblocked];
 				eval += (player == current)*xianShouCheng[min(r - l + 1, 5)][leftUnblocked + rightUnblocked];
+				chengCnt[min((r - l + 1), 5)][leftUnblocked + rightUnblocked]++;
 				// 冲
 				if (lastR != -1 && lastR == l - 2 && chessBoard[l - 1][j] == blank) {
 					eval += chong[min(r - lastL + 1, 5)][lastLB + rightUnblocked];
 					eval += (player == current)*xianShouChong[min(r - lastL + 1, 5)][lastLB + rightUnblocked];
+					chongCnt[min(r - lastL + 1, 5)][lastLB + rightUnblocked]++;
 				}
 				lastL = l; lastR = r; lastLB = leftUnblocked; lastRB = rightUnblocked;
 				i = r;
@@ -115,10 +122,12 @@ int evaluate(int player, int current)//估值算法，返回估值
 				int rightUnblocked = !(r + 1 == maxJ + 1 || chessBoard[s - (r + 1)][r + 1] == opposite(player));
 				eval += cheng[min(r - l + 1, 5)][leftUnblocked + rightUnblocked];
 				eval += (player == current)*xianShouCheng[min(r - l + 1, 5)][leftUnblocked + rightUnblocked];
+				chengCnt[min((r - l + 1), 5)][leftUnblocked + rightUnblocked]++;
 				// 冲
 				if (lastR != -1 && lastR == l - 2 && chessBoard[s - (l - 1)][l - 1] == blank) {
 					eval += chong[min(r - lastL + 1, 5)][lastLB + rightUnblocked];
 					eval += (player == current)*xianShouChong[min(r - lastL + 1, 5)][lastLB + rightUnblocked];
+					chongCnt[min(r - lastL + 1, 5)][lastLB + rightUnblocked]++;
 				}
 				lastL = l; lastR = r; lastLB = leftUnblocked; lastRB = rightUnblocked;
 				j = r;
@@ -140,24 +149,29 @@ int evaluate(int player, int current)//估值算法，返回估值
 				int rightUnblocked = !(r + 1 == maxJ + 1 || chessBoard[s + (r + 1)][r + 1] == opposite(player));
 				eval += cheng[min(r - l + 1, 5)][leftUnblocked + rightUnblocked];
 				eval += (player == current)*xianShouCheng[min(r - l + 1, 5)][leftUnblocked + rightUnblocked];
+				chengCnt[min((r - l + 1), 5)][leftUnblocked + rightUnblocked]++;
 				// 冲
 				if (lastR != -1 && lastR == l - 2 && chessBoard[s + (l - 1)][l - 1] == blank) {
 					eval += chong[min(r - lastL + 1, 5)][lastLB + rightUnblocked];
 					eval += (player == current)*xianShouChong[min(r - lastL + 1, 5)][lastLB + rightUnblocked];
+					chongCnt[min(r - lastL + 1, 5)][lastLB + rightUnblocked]++;
 				}
 				lastL = l; lastR = r; lastLB = leftUnblocked; lastRB = rightUnblocked;
 				j = r;
 			}
 		}
 	}
-	return eval;
+	return patternAnalysis(chengCnt, chongCnt) + eval;
 }
 
 static constexpr int Dx[] = { 1,0,1,1 };
 static constexpr int Dy[] = { 0,1,1,-1 };
 
+
+
 int evaluateStep(int player, int x, int y)
 {
+	int chengCnt[6][3]{}, chongCnt[6][3]{};
 	int eval = 0;
 	for (int k = 0; k < 4; k++) {
 		int dx = Dx[k], dy = Dy[k];
@@ -170,6 +184,8 @@ int evaluateStep(int player, int x, int y)
 		int rightUnblocked = !(!inboard(rx + dx, ry + dy) || chessBoard[rx + dx][ry + dy] == opposite(player));
 		// 成
 		eval += cheng[min(max(abs(rx - lx + 1), abs(ry - ly + 1)), 5)][leftUnblocked + rightUnblocked];
+		chengCnt[min((rx - lx + 1), 5)][leftUnblocked + rightUnblocked]++;
+		chengCnt[min((ry - ly + 1), 5)][leftUnblocked + rightUnblocked]++;
 
 		// 左冲
 		if (!leftUnblocked && inboard(lx - 2 * dx, ly - 2 * dy) && chessBoard[lx - 2 * dx][ly - 2 * dy] == player) {
@@ -178,6 +194,8 @@ int evaluateStep(int player, int x, int y)
 				llx -= dx, lly -= dy;
 			int leftLeftUnblocked = !(!inboard(llx - dx, lly - dy) || chessBoard[llx - dx][lly - dy] == opposite(player));
 			eval += chong[min(max(abs(rx - llx + 1), abs(ry - lly + 1)), 5)][leftLeftUnblocked + rightUnblocked];
+			chongCnt[min(abs(rx - llx + 1), 5)][leftLeftUnblocked + rightUnblocked]++;
+			chongCnt[min(abs(ry - lly + 1), 5)][leftLeftUnblocked + rightUnblocked]++;
 		}
 
 		// 右冲
@@ -187,7 +205,42 @@ int evaluateStep(int player, int x, int y)
 				rrx += dx, rry += dy;
 			int rightRightUnblocked = !(!inboard(rrx + dx, rry + dy) || chessBoard[rrx + dx][rry + dy] == opposite(player));
 			eval += chong[min(max(abs(rrx - lx + 1), abs(rry - ly + 1)), 5)][leftUnblocked + rightRightUnblocked];
+			chongCnt[min(abs(rrx - lx + 1), 5)][leftUnblocked + rightRightUnblocked];
+			chongCnt[min(abs(rry - ly + 1), 5)][leftUnblocked + rightRightUnblocked];
+
 		}
 	}
-	return eval;
+	return patternAnalysis(chengCnt, chongCnt) + eval;
+}
+
+// 组合棋型分析
+int patternAnalysis(int chengCnt[6][3], int chongCnt[6][3])
+{
+	// TO DO:
+	// evaluate()中的代码似乎会认为OO.OO/O.OOO型为“冲5”，
+	// 而文献中貌似说这种棋型为“冲4”？[张明亮等.]
+	// anyway, 下面所说的冲5指代“OO.OO”这种模式
+
+	int ret = 0, winMove = 0, goodTry = 0;
+	winMove += chengCnt[4][2] + cheng[5][0] + cheng[5][1] + cheng[5][2];
+	winMove += (chengCnt[3][2] > 1); //双活三型
+	winMove += ((chongCnt[5][0] + chongCnt[5][1] + chongCnt[5][2]) > 1); //双冲五型
+	winMove += ((chengCnt[3][2] + chengCnt[4][1]) > 1); //活三+半活四型
+	winMove += (chengCnt[4][1] + chongCnt[5][2] > 1); //半活四+冲5型，且这两个棋形不在一起，不会被同时堵死，则必胜
+
+	ret += !!winMove * (winValue / 2);
+
+	//准必赢、潜力棋型
+	//常数代表“推荐系数”或“期望”，可适当调整
+	goodTry += 50 * (chengCnt[3][2] + chongCnt[5][2] > 1); //活三+冲5型,有一定概率被堵死（.OOO.O.）,但可以尝试
+
+	//对方必应
+	goodTry += 20 * ((chengCnt[3][1] + chengCnt[3][2]) > 1); //半活三+活三，对方必应
+	goodTry += 10 * (chengCnt[3][2]);
+	goodTry += 10 * (chongCnt[4][1] + chongCnt[4][0]); //冲4对方必应
+	goodTry += 10 * (chengCnt[3][1] > 1); //双半活三，对方必应
+
+	ret += goodTry * 100; // 数值可以适当调整
+
+	return ret;
 }
