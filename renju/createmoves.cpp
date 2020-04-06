@@ -23,7 +23,7 @@ std::vector<point> createMoves(int player, int depth)
 	sort(defends.begin(), defends.end(), [&](const point& A, const point& B) {
 		return eval[A.x][A.y] > eval[B.x][B.y];
 		});
-	while (defends.size() > 3) defends.pop_back();
+	while (defends.size() > DEFEND_NUM) defends.pop_back();
 
 	//attacks + minimax
 	for (int i = 1; i <= n; i++)

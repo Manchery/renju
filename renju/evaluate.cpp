@@ -184,8 +184,7 @@ int evaluateStep(int player, int x, int y)
 		int rightUnblocked = !(!inboard(rx + dx, ry + dy) || chessBoard[rx + dx][ry + dy] == opposite(player));
 		// 成
 		eval += cheng[min(max(abs(rx - lx + 1), abs(ry - ly + 1)), 5)][leftUnblocked + rightUnblocked];
-		chengCnt[min((rx - lx + 1), 5)][leftUnblocked + rightUnblocked]++;
-		chengCnt[min((ry - ly + 1), 5)][leftUnblocked + rightUnblocked]++;
+		chengCnt[min(max(abs(rx - lx + 1), abs(ry - ly + 1)), 5)][leftUnblocked + rightUnblocked]++;
 
 		// 左冲
 		if (!leftUnblocked && inboard(lx - 2 * dx, ly - 2 * dy) && chessBoard[lx - 2 * dx][ly - 2 * dy] == player) {
@@ -194,8 +193,7 @@ int evaluateStep(int player, int x, int y)
 				llx -= dx, lly -= dy;
 			int leftLeftUnblocked = !(!inboard(llx - dx, lly - dy) || chessBoard[llx - dx][lly - dy] == opposite(player));
 			eval += chong[min(max(abs(rx - llx + 1), abs(ry - lly + 1)), 5)][leftLeftUnblocked + rightUnblocked];
-			chongCnt[min(abs(rx - llx + 1), 5)][leftLeftUnblocked + rightUnblocked]++;
-			chongCnt[min(abs(ry - lly + 1), 5)][leftLeftUnblocked + rightUnblocked]++;
+			chongCnt[min(max(abs(rx - llx + 1), abs(ry - lly + 1)), 5)][leftLeftUnblocked + rightUnblocked]++;
 		}
 
 		// 右冲
@@ -205,9 +203,7 @@ int evaluateStep(int player, int x, int y)
 				rrx += dx, rry += dy;
 			int rightRightUnblocked = !(!inboard(rrx + dx, rry + dy) || chessBoard[rrx + dx][rry + dy] == opposite(player));
 			eval += chong[min(max(abs(rrx - lx + 1), abs(rry - ly + 1)), 5)][leftUnblocked + rightRightUnblocked];
-			chongCnt[min(abs(rrx - lx + 1), 5)][leftUnblocked + rightRightUnblocked];
-			chongCnt[min(abs(rry - ly + 1), 5)][leftUnblocked + rightRightUnblocked];
-
+			chongCnt[min(max(abs(rrx - lx + 1), abs(rry - ly + 1)), 5)][leftUnblocked + rightRightUnblocked];
 		}
 	}
 	return patternAnalysis(chengCnt, chongCnt) + eval;
@@ -222,23 +218,22 @@ int patternAnalysis(int chengCnt[6][3], int chongCnt[6][3])
 	// anyway, 下面所说的冲5指代“OO.OO”这种模式
 
 	int ret = 0, winMove = 0, goodTry = 0;
-	winMove += chengCnt[4][2] + cheng[5][0] + cheng[5][1] + cheng[5][2];
+	winMove += chengCnt[4][2] + chengCnt[5][0] + chengCnt[5][1] + chengCnt[5][2];
 	winMove += (chengCnt[3][2] > 1); //双活三型
 	winMove += ((chongCnt[5][0] + chongCnt[5][1] + chongCnt[5][2]) > 1); //双冲五型
-	winMove += ((chengCnt[3][2] + chengCnt[4][1]) > 1); //活三+半活四型
-	winMove += (chengCnt[4][1] + chongCnt[5][2] > 1); //半活四+冲5型，且这两个棋形不在一起，不会被同时堵死，则必胜
+	winMove += (chengCnt[3][2] && chengCnt[4][1]); //活三+半活四型
+	winMove += (chengCnt[4][1] && chongCnt[5][2]); //半活四+冲5型，且这两个棋形不在一起，不会被同时堵死，则必胜
 
 	ret += !!winMove * (winValue / 2);
 
 	//准必赢、潜力棋型
 	//常数代表“推荐系数”或“期望”，可适当调整
-	goodTry += 50 * (chengCnt[3][2] + chongCnt[5][2] > 1); //活三+冲5型,有一定概率被堵死（.OOO.O.）,但可以尝试
+	goodTry += 50 * (chengCnt[3][2] && chongCnt[5][2]); //活三+冲5型,有一定概率被堵死（.OOO.O.）,但可以尝试
+	goodTry += 25 * (chengCnt[4][1] && (chongCnt[5][1] || chongCnt[5][0])); //半活四+冲5型，但可能被堵死
 
 	//对方必应
-	goodTry += 20 * ((chengCnt[3][1] + chengCnt[3][2]) > 1); //半活三+活三，对方必应
-	goodTry += 10 * (chengCnt[3][2]);
-	goodTry += 10 * (chongCnt[4][1] + chongCnt[4][0]); //冲4对方必应
-	goodTry += 10 * (chengCnt[3][1] > 1); //双半活三，对方必应
+	goodTry += 100 * (chengCnt[3][2] + chongCnt[4][2]);
+	goodTry += 100 * (chongCnt[5][0] + chongCnt[5][1]);
 
 	ret += goodTry * 100; // 数值可以适当调整
 
