@@ -21,5 +21,14 @@ void initHashValue() {
 	hashMap.clear();
 }
 
+void hashMapClean()
+{
+	for (auto iter = hashMap.begin(); iter != hashMap.end();) {
+		if (timeStamp - iter->second.time > HASH_CLEAN_TIME)
+			iter = hashMap.erase(iter);
+		else
+			iter++;
+	}
+}
+
 std::unordered_map<hash_t, hashNode> hashMap;
-int hashSuccess;

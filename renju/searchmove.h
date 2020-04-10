@@ -17,9 +17,9 @@ std::pair<point, int> MiniMax(int current, int depth, int alpha, int beta);
 
 std::pair<point, int> findHashMap(int current, int depth, int alpha, int beta);
 
-std::pair<point, int> idSearch(int depth = SEARCH_DEPTH, unsigned timeout = TIME_ALLOWED);
-
 void recordHashMap(int depth, hashFlag flag, int value, point move);
+
+std::pair<point, int> idSearch(unsigned timeout = TIME_ALLOWED, int depth = SEARCH_DEPTH);
 
 point randomMove();
 

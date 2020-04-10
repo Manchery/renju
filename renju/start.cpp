@@ -22,18 +22,22 @@ int main()
 		system("pause");
 		return 0;
 	}
+	int eval = 0;
 
 	if (!getRecord)
 	{
 		if (agent == white) zobrist ^= whiteFirst;
 		if (agent == black) {
-			//point agentMove = randomMove();
-			point agentMove = point(8, 8);
-			// agentMove.x += rand() % 3 - 1;
-			// agentMove.y += rand() % 3 - 1;
+			userWaiting();
+			std::pair<point, int> searchResult = searchMove();
+			point agentMove = searchResult.first;
+			eval = searchResult.second;
 			makeMove(agentMove, agent);
 			agentLastMove = agentMove;
 			timeStamp++;
+			if (gameover(agentMove, agent)) {
+				winner = agent;
+			}
 		}
 	}
 	else if ((agent + getRecord) % 2)
@@ -48,8 +52,6 @@ int main()
 			winner = agent;
 		}
 	}
-
-	int eval = 0;
 	while (!winner) {
 	    point userMove = getUserMove(eval, agentLastMove);
 		makeMove(userMove, user);

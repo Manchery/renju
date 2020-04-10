@@ -25,10 +25,14 @@ struct hashNode {
 	hashFlag flag;
 	int value;
 	point move;
+	int time;
 	hashNode() { }
-	hashNode(hash_t zobrist, int depth, hashFlag flag, int value, point move, int timeStamp = 0) :
-		zobrist(zobrist), depth(depth), flag(flag), value(value), move(move) { }
+	hashNode(hash_t zobrist, int depth, hashFlag flag, int value, point move, int time) :
+		zobrist(zobrist), depth(depth), flag(flag), value(value), move(move), time(time) { }
 };
 
+#define HASH_CLEAN_TIME 2
+
 extern std::unordered_map<hash_t, hashNode> hashMap;
-extern int hashSuccess;
+
+void hashMapClean();

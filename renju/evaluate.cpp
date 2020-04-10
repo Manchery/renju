@@ -7,8 +7,8 @@ using namespace std;
 const int cheng[6][3] = {
 {0,0,0},
 {0,0,0}, //成 1
-{3,50,100}, // 成 2：死，单活，双活
-{5,200,5000}, // 成 3
+{30,50,100}, // 成 2：死，单活，双活
+{50,200,5000}, // 成 3
 {10,8000,500000}, // 成 4
 {10000000,10000000,10000000}
 };
@@ -40,15 +40,33 @@ const int xianShouChong[6][3] = {
 {10000000,10000000,10000000}, // 先手冲 5 必赢
 };
 
+// Reference: [五子棋中的人工智能（一）：局面估计_人工智能_zhulong890816的专栏 - CSDN博客] (https://blog.csdn.net/zhulong890816/article/details/45459289)
+const int PosValue[GRID_NUM][GRID_NUM] =
+{
+	{0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 
+	{0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0, 0,1,1,1,1,1,1,1,1,1,1,1,1,1,0},
+	{0, 0,1,2,2,2,2,2,2,2,2,2,2,2,1,0},
+	{0, 0,1,2,3,3,3,3,3,3,3,3,3,2,1,0},
+	{0, 0,1,2,3,4,4,4,4,4,4,4,3,2,1,0},
+	{0, 0,1,2,3,4,5,5,5,5,5,4,3,2,1,0},
+	{0, 0,1,2,3,4,5,6,6,6,5,4,3,2,1,0},
+	{0, 0,1,2,3,4,5,6,7,6,5,4,3,2,1,0},
+	{0, 0,1,2,3,4,5,6,6,6,5,4,3,2,1,0},
+	{0, 0,1,2,3,4,5,5,5,5,5,4,3,2,1,0},
+	{0, 0,1,2,3,4,4,4,4,4,4,4,3,2,1,0},
+	{0, 0,1,2,3,3,3,3,3,3,3,3,3,2,1,0},
+	{0, 0,1,2,2,2,2,2,2,2,2,2,2,2,1,0},
+	{0, 0,1,1,1,1,1,1,1,1,1,1,1,1,1,0},
+	{0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+};
 
 int Evaluate(int current) { //局面估值算法，返回估值
 	int res = evaluate(agent, current) - evaluate(user, current);
 	if (current == user) res -= 500;
 	return res;
 }
-
-
 
 int evaluate(int player, int current)//估值算法，返回估值
 {
@@ -167,8 +185,6 @@ int evaluate(int player, int current)//估值算法，返回估值
 static constexpr int Dx[] = { 1,0,1,1 };
 static constexpr int Dy[] = { 0,1,1,-1 };
 
-
-
 int evaluateStep(int player, int x, int y)
 {
 	int chengCnt[6][3]{}, chongCnt[6][3]{};
@@ -206,10 +222,11 @@ int evaluateStep(int player, int x, int y)
 			chongCnt[min(max(abs(rrx - lx + 1), abs(rry - ly + 1)), 5)][leftUnblocked + rightRightUnblocked];
 		}
 	}
-	return patternAnalysis(chengCnt, chongCnt) + eval;
+	return patternAnalysis(chengCnt, chongCnt) + eval + PosValue[x][y];
 }
 
 // 组合棋型分析
+// TODO：绝杀棋局快速响应
 int patternAnalysis(int chengCnt[6][3], int chongCnt[6][3])
 {
 	// TO DO:

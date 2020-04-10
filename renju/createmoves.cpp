@@ -6,8 +6,9 @@ using namespace std;
 
 std::unordered_map<hash_t, std::vector<point>> createdMoves;
 
-std::vector<point> createMoves(int player, int depth)
+std::vector<point> createMoves(int player)
 {
+	// 为了效率，hash表中存储的行动优先扩展的相关代码被揉到 MiniMax 函数里面了
 	if (createdMoves.find(zobrist) != createdMoves.end()) return createdMoves[zobrist];
 	int n = GRID_NUM - 1;
 	int eval[GRID_NUM][GRID_NUM];
@@ -32,11 +33,6 @@ std::vector<point> createMoves(int player, int depth)
 				moves.push_back(point(i, j));
 				eval[i][j] = evaluateStep(player, i, j);
 			}
-	if (depth < currentBest.size())
-	{
-		auto& p = currentBest[depth];
-		eval[p.x][p.y] += winValue / (1 + depth);
-	}
 	sort(moves.begin(), moves.end(), [&](const point &A, const point &B) {
 		return eval[A.x][A.y] > eval[B.x][B.y];
 	});
@@ -49,7 +45,7 @@ std::vector<point> createMoves(int player, int depth)
 	}
 	sort(moves.begin(), moves.end(), [&](const point& A, const point& B) {
 		return eval[A.x][A.y] > eval[B.x][B.y];
-		});
+	});
 	createdMoves[zobrist] = moves;
 	return moves;
 }

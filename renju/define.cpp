@@ -17,11 +17,10 @@ int agent; // agent = black | white
 int user; // user = black | white, 与 agent 相反
 
 int getRecord; // 是否有棋谱
-int idDepth; // 迭代深度
 
 int timeStamp;
 
-void clearAll() {
+void clearAll() { // TODO: clear more data，不过似乎一盘棋中间不需要 clearAll
 	agent = user = winner = blank;
 	moveTrace[0].clear(); moveTrace[1].clear();
 	memset(chessBoard, 0, sizeof(chessBoard));
