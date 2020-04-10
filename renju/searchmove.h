@@ -8,7 +8,7 @@
 #include <algorithm>
 
 #define SEARCH_DEPTH (12)
-#define TIME_ALLOWED (500000U)
+#define TIME_ALLOWED (50000U)
 
 std::pair<point, int> searchMove(); //ËÑË÷ºËÐÄ
 

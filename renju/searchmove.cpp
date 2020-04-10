@@ -19,12 +19,6 @@ static int ran01() { static int x = 31253125; x += (x << 4) + 1; return x & 6553
 std::pair<point, int> MiniMax(int current, int depth, int alpha, int beta) {
 	std::pair<point, int> hashResult = findHashMap(current, depth, alpha, beta);
 	if (hashResult.second != hashUnknowValue) {
-		/*if (depth > 2) {
-			++hashSuccess;
-			if (hashSuccess % 100 == 0) {
-				cerr << "Hash Success: " << hashSuccess << endl;
-			}
-		}*/
 		return hashResult;
 	}
 	point hashGivenMove = hashResult.first;
@@ -53,7 +47,6 @@ std::pair<point, int> MiniMax(int current, int depth, int alpha, int beta) {
 					newv = MiniMax(opposite(current), depth - 1, alpha, beta).second;
 				if (newv > v || (newv == v && ran01())) // 增加随机性
 				{
-					//if (newv > v)
 					v = newv, optMove = currentMove;
 					currentBest[(long long)idDepth - depth] = currentMove;
 				}
@@ -85,7 +78,6 @@ std::pair<point, int> MiniMax(int current, int depth, int alpha, int beta) {
 					newv = MiniMax(opposite(current), depth - 1, alpha, beta).second;
 				if (newv < v || (newv == v && ran01())) // 增加随机性
 				{
-					//if (newv < v)
 					v = newv, optMove = currentMove;
 					currentBest[(long long)idDepth - depth] = currentMove;
 				}

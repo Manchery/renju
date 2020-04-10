@@ -17,7 +17,6 @@ void Trim(string & str)
 }
 
 int getTheIntitative() {
-	if (readRecord()) return agent;
 	system("cls");
 	cout << "*************五子棋人机对弈AI*************" << endl;
 	cout << endl; print(); cout << endl;
@@ -37,11 +36,13 @@ int getTheIntitative() {
 	}
 }
 
-point getUserMove(int eval)
+point getUserMove(int eval, point agentLastMove)
 {
 	system("cls");
 	cout << "*************五子棋人机对弈AI*************" << endl;
 	cout << endl; print(); cout << endl;
+	if (!(agentLastMove == point()))
+		cout << "电脑上步落子：(" << agentLastMove.x << "," << agentLastMove.y << ")" << endl;
 	cout << (agent == black ? "黑" : "白") << "棋局面评估: " << ((eval > 0) ? "+" : "") << eval << endl << endl;
 	cout << "输入: move r c  表示落子点（r,c 分别表示行列）" << endl << endl;
 

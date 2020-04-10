@@ -5,7 +5,7 @@
 
 int getTheIntitative();
 
-point getUserMove(int eval);
+point getUserMove(int eval, point agentLastMove);
 
 void outputWinner();
 
