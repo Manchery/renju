@@ -7,14 +7,16 @@
 #include "hash.h"
 int main()
 {
+	//哈希表初始化
 	initHashValue();
 
+	//读入记录
 	if (!readRecord())
 		agent = getTheIntitative();
 	user = agent == black ? white : black;
-
 	point agentLastMove(0, 0);
 
+	//终局判定
 	if (winner = gameover())
 	{
 		outputWinner();
@@ -24,6 +26,7 @@ int main()
 	}
 	int eval = 0;
 
+	//AI计算第一步棋
 	if (!getRecord)
 	{
 		if (agent == white) zobrist ^= whiteFirst;
@@ -52,6 +55,8 @@ int main()
 			winner = agent;
 		}
 	}
+
+	//AI和玩家轮流操作
 	while (!winner) {
 	    point userMove = getUserMove(eval, agentLastMove);
 		makeMove(userMove, user);
@@ -72,6 +77,8 @@ int main()
 		writeRecord();
 	}
 
+	//判定终局时的游戏状态
+	//并保存相关信息
 	winner = (gameover() == draw ? draw : winner);
 	outputWinner();
 	writeRecord();

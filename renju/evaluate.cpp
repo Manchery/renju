@@ -4,6 +4,7 @@
 #include <cmath>
 using namespace std;
 
+//连续单线棋型估值表
 const int cheng[6][3] = {
 {0,0,0},
 {0,0,0}, //成 1
@@ -13,6 +14,7 @@ const int cheng[6][3] = {
 {10000000,10000000,10000000}
 };
 
+//间断单线棋型估值表
 const int chong[6][3] = {
 {0,0,0},
 {0,0,0},
@@ -22,6 +24,7 @@ const int chong[6][3] = {
 {20,200,8000} // 冲 5
 };
 
+//先手的连续单线棋型估值表
 const int xianShouCheng[6][3] = {
 {0,0,0},
 {0,0,0},
@@ -31,6 +34,7 @@ const int xianShouCheng[6][3] = {
 {10000000,10000000,10000000},
 };
 
+//先手的间断单线棋型估值表
 const int xianShouChong[6][3] = {
 {0,0,0},
 {0,0,0},
@@ -40,7 +44,9 @@ const int xianShouChong[6][3] = {
 {10000000,10000000,10000000}, // 先手冲 5 必赢
 };
 
-// Reference: [五子棋中的人工智能（一）：局面估计_人工智能_zhulong890816的专栏 - CSDN博客] (https://blog.csdn.net/zhulong890816/article/details/45459289)
+//落子点的自带权重分布表
+//Reference: [五子棋中的人工智能（一）：局面估计_人工智能_zhulong890816的专栏 - CSDN博客] 
+//(https://blog.csdn.net/zhulong890816/article/details/45459289)
 const int PosValue[GRID_NUM][GRID_NUM] =
 {
 	{0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -62,13 +68,15 @@ const int PosValue[GRID_NUM][GRID_NUM] =
 	{0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
 };
 
-int Evaluate(int current) { //局面估值算法，返回估值
+//全局估值算法
+int Evaluate(int current) {
 	int res = evaluate(agent, current) - evaluate(user, current);
 	if (current == user) res -= 500;
 	return res;
 }
 
-int evaluate(int player, int current)//估值算法，返回估值
+//对某一方进行局面整体估值
+int evaluate(int player, int current)
 {
 	const int n = GRID_NUM-1;
 	int eval = 0;
@@ -182,9 +190,11 @@ int evaluate(int player, int current)//估值算法，返回估值
 	return patternAnalysis(chengCnt, chongCnt) + eval;
 }
 
-static constexpr int Dx[] = { 1,0,1,1 };
+
+static constexpr int Dx[] = { 1,0,1,1 };						//搜索方向控制
 static constexpr int Dy[] = { 0,1,1,-1 };
 
+//对某一方进行单步落子的快速估值
 int evaluateStep(int player, int x, int y)
 {
 	int chengCnt[6][3]{}, chongCnt[6][3]{};
@@ -225,34 +235,26 @@ int evaluateStep(int player, int x, int y)
 	return patternAnalysis(chengCnt, chongCnt) + eval + PosValue[x][y];
 }
 
-// 组合棋型分析
-// TODO：绝杀棋局快速响应
+//组合棋型估值
 int patternAnalysis(int chengCnt[6][3], int chongCnt[6][3])
 {
-	// TO DO:
-	// evaluate()中的代码似乎会认为OO.OO/O.OOO型为“冲5”，
-	// 而文献中貌似说这种棋型为“冲4”？[张明亮等.]
-	// anyway, 下面所说的冲5指代“OO.OO”这种模式
-
+	//必胜棋型
 	int ret = 0, winMove = 0, goodTry = 0;
 	winMove += chengCnt[4][2] + chengCnt[5][0] + chengCnt[5][1] + chengCnt[5][2];
 	winMove += (chengCnt[3][2] > 1); //双活三型
 	winMove += ((chongCnt[5][0] + chongCnt[5][1] + chongCnt[5][2]) > 1); //双冲五型
 	winMove += (chengCnt[3][2] && chengCnt[4][1]); //活三+半活四型
 	winMove += (chengCnt[4][1] && chongCnt[5][2]); //半活四+冲5型，且这两个棋形不在一起，不会被同时堵死，则必胜
-
-	ret += !!winMove * winValue;
+	ret += !!winMove * (winValue / 2);
 
 	//准必赢、潜力棋型
-	//常数代表“推荐系数”或“期望”，可适当调整
 	goodTry += 50 * (chengCnt[3][2] && chongCnt[5][2]); //活三+冲5型,有一定概率被堵死（.OOO.O.）,但可以尝试
+	goodTry += 30 * (chengCnt[3][2] && (chongCnt[5][1] || chongCnt[5][0])); //活三+半冲5型
 	goodTry += 25 * (chengCnt[4][1] && (chongCnt[5][1] || chongCnt[5][0])); //半活四+冲5型，但可能被堵死
 
 	//对方必应
 	goodTry += 100 * (chengCnt[3][2] + chongCnt[4][2]);
 	goodTry += 100 * (chongCnt[5][0] + chongCnt[5][1]);
-
-	ret += goodTry * 100; // 数值可以适当调整
-
+	ret += goodTry * 100;
 	return ret;
 }

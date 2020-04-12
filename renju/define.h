@@ -12,37 +12,35 @@
 #include <vector>
 #include <ctime>
 
-#define DBG_LOG
-
+//棋盘坐标的点对
 struct point {
 	int x, y;
 	point(int x=0, int y=0):x(x),y(y) {} 
 };
+
+//点对运算符的重载
 bool operator ==(const point &A, const point &B);
 
-#define blank (0)		//空白点
-#define black (1)		//黑方
-#define white (2)		//白方
-#define draw  (3)		//平局
-#define opposite(x) (3-(x)) // 对方
-#define inf (1<<30)
-#define winValue (100000000)
+#define blank (0)												//空白点
+#define black (1)												//黑方
+#define white (2)												//白方
+#define draw  (3)												//平局
+#define opposite(x) (3-(x))										//计算对方的坐标
+#define inf (1<<30)												//常数正无穷
+#define winValue (100000000)									//必胜局面的赋值
 #define inboard(a,b) ((a)>0 && (a)<=15 && (b)>0 && (b)<=15)		//用于检验招法是否在棋盘上
+#define GRID_NUM 16												//棋盘规模	
+	
+extern int chessBoard[GRID_NUM][GRID_NUM];						//棋盘
+extern int winner;												//记录游戏结束时的赢家或平局状态
+extern int remainBlank;											//棋盘中的剩余可用空位
+extern std::vector<point> moveRecord;							//下棋记录
+extern int getRecord;											//是否检测到记录的棋谱
+extern int agent;												//AI扮演的角色(黑棋/白棋)
+extern int user;												//玩家扮演的角色(与AI相反)
+extern int timeStamp;											//时间戳
 
-#define GRID_NUM 16	//棋盘规模	
-extern int chessBoard[GRID_NUM][GRID_NUM]; //棋盘
-extern int winner;
-extern int remainBlank; // 剩余可用空位
-extern std::vector<point> moveTrace[3];
-extern std::vector<point> moveRecord; // 棋谱记录
-
-extern int agent; // agent = black | white
-extern int user; // user = black | white, 与 agent 相反
-
-extern int getRecord; // 是否有棋谱
-
-extern int timeStamp; // 时间戳
-
+//清空记录
 void clearAll();
 
 #endif

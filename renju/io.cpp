@@ -9,6 +9,7 @@
 #include <string>
 using namespace std;
 
+//字符串处理
 void Trim(string & str)
 {
 	string blanks("\f\v\r\t\n ");
@@ -16,6 +17,7 @@ void Trim(string & str)
 	str.erase(str.find_last_not_of(blanks) + 1);
 }
 
+//程序初始化
 int getTheIntitative() {
 	system("cls");
 	cout << "*************五子棋人机对弈AI*************" << endl;
@@ -36,15 +38,16 @@ int getTheIntitative() {
 	}
 }
 
-enum stateSet {NORMAL, INVALID, REGRET_SUCCESS, REGRET_FAILED};
+enum stateSet {NORMAL, INVALID, REGRET_SUCCESS, REGRET_FAILED}; //输入的合法性验证
 
-const string stateIndicator[4] = {
+const string stateIndicator[4] = {								//提示信息
 	"请输入指令：",
 	"指令有误，请重新输入：",
 	"悔棋成功，请继续下棋：",
 	"您不需要悔棋，请重新输入指令："
 };
 
+//等待用户输入
 point getUserMove(int eval, point agentLastMove)
 {
 	static int state = NORMAL;
@@ -63,7 +66,7 @@ point getUserMove(int eval, point agentLastMove)
 		cout << "输入: regret 来悔棋" << endl << endl;
 		cout << stateIndicator[state];
 		string input;
-		getline(cin, input); //Trim(input);
+		getline(cin, input);
 		istringstream sin(input);
 		bool fail = false;
 		string order; sin >> order;
@@ -85,6 +88,7 @@ point getUserMove(int eval, point agentLastMove)
 	}
 }
 
+//输出赢家
 void outputWinner()
 {
 	system("cls");
@@ -96,6 +100,7 @@ void outputWinner()
 	cout << "获胜。" << endl;
 }
 
+//AI计算时的等待界面
 void userWaiting()
 {
 	system("cls");
@@ -104,6 +109,7 @@ void userWaiting()
 	cout << "电脑思考中..." << endl;
 }
 
+//读入记录以进行复盘
 bool readRecord()
 {
 	ifstream fin(".\\record.txt");
@@ -111,7 +117,7 @@ bool readRecord()
 	if (!agent) return false;
 	if (agent)
 	{
-		cout << "检测到棋谱，是否读入？[Y/N]";// << endl;
+		cout << "检测到棋谱，是否读入？[Y/N]";
 		string input;
 		getline(cin, input); Trim(input);
 		char ch = 'N';
@@ -139,14 +145,11 @@ bool readRecord()
 	return true;
 }
 
+//保存记录
 void writeRecord()
 {
 	ofstream fout(".\\record.txt");
-	if (!fout.is_open()) { 
-#ifdef DBG_LOG
-		cout << "棋谱文件不能正常读写." << endl;
-#endif // DBG_LOG
-		return; }
+	if (!fout.is_open()) { return; }
 	fout << agent << endl;
 	for (auto it : moveRecord)
 	{
@@ -154,6 +157,7 @@ void writeRecord()
 	}
 }
 
+//悔棋
 void regret(int& state, point& lastMove)
 {
 	if (moveRecord.size() >= 2U)

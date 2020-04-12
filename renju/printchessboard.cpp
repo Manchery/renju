@@ -3,6 +3,7 @@
 #include <iostream>
 using namespace std;
 
+//生成棋盘形状
 void judge(int i, int j)
 {
 	if (i == 1 && j == 1)
@@ -25,7 +26,8 @@ void judge(int i, int j)
 		printf("┼ ");
 }
 
-void print() //棋盘打印
+//打印棋盘
+void print() 
 {
 	for (int i = 0; i < 16; i++)
 	{

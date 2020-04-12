@@ -2,27 +2,22 @@
 #include <cstring>
 using namespace std;
 
+//点对运算符的重载
 bool operator ==(const point &A, const point &B) {
 	return A.x == B.x && A.y == B.y;
 }
 
-int chessBoard[GRID_NUM][GRID_NUM];//定义棋盘
-int winner = blank;
-int remainBlank = 225; // 剩余可用空位
-std::vector<point> moveTrace[3];
-std::vector<point> moveRecord; // 棋谱记录
-std::vector<point> currentBest; // 迭代加深时的当前最优解
+int chessBoard[GRID_NUM][GRID_NUM];						//棋盘
+int winner = blank;										//记录游戏结束时的赢家或平局状态
+int remainBlank = 225;									//棋盘中的剩余可用空位
+std::vector<point> moveRecord;							//下棋记录
+int agent;												//AI扮演的角色(黑棋/白棋)
+int user;												//玩家扮演的角色(与AI相反)
+int getRecord;											//是否检测到记录的棋谱
+int timeStamp;											//时间戳
 
-
-int agent; // agent = black | white
-int user; // user = black | white, 与 agent 相反
-
-int getRecord; // 是否有棋谱
-
-int timeStamp;
-
-void clearAll() { // TODO: clear more data，不过似乎一盘棋中间不需要 clearAll
+//清空记录
+void clearAll() {
 	agent = user = winner = blank;
-	moveTrace[0].clear(); moveTrace[1].clear();
 	memset(chessBoard, 0, sizeof(chessBoard));
 }

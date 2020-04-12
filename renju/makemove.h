@@ -5,9 +5,11 @@
 #include "define.h"
 #include <algorithm>
 
-bool makeMove(int x, int y, int player);//执行走法
-bool makeMove(point pos, int player);//执行走法
+//执行走法
+bool makeMove(int x, int y, int player);
+bool makeMove(point pos, int player);
 
-bool unMakeMove(int player);//撤销走法
+//撤销走法
+bool unMakeMove(int player);
 
 #endif

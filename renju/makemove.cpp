@@ -3,16 +3,17 @@
 #include "makemove.h"
 #include "hash.h"
 
+//执行走法
 bool makeMove(int x, int y, int player)
 {
 	return makeMove(point(x, y), player);
 }
 
+//执行走法
 bool makeMove(point pos, int player)
 {
 	if (chessBoard[pos.x][pos.y] != blank) return false;
 	chessBoard[pos.x][pos.y] = player;
-	moveTrace[player].push_back(pos);
 	zobrist ^= zobristValue[pos.x][pos.y][player];
 	zobrist ^= whiteFirst;
 	zobrist ^= MinFirst;
@@ -21,14 +22,13 @@ bool makeMove(point pos, int player)
 	return true;
 }
 
+//撤销走法
 bool unMakeMove(int player)
 {
-	//撤销落子操作
-	point pos = moveTrace[player].back();
+	point pos = moveRecord.back();
 	zobrist ^= zobristValue[pos.x][pos.y][player];
 	zobrist ^= whiteFirst;
 	zobrist ^= MinFirst;
-	moveTrace[player].pop_back();
 	moveRecord.pop_back();
 	chessBoard[pos.x][pos.y] = blank;
 	remainBlank++;
