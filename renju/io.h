@@ -14,3 +14,5 @@ void userWaiting();
 bool readRecord();
 
 void writeRecord();
+
+void regret(int& state, point& lastMove);

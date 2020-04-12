@@ -23,6 +23,7 @@ bool operator ==(const point &A, const point &B);
 #define blank (0)		//空白点
 #define black (1)		//黑方
 #define white (2)		//白方
+#define draw  (3)		//平局
 #define opposite(x) (3-(x)) // 对方
 #define inf (1<<30)
 #define winValue (100000000)
@@ -31,6 +32,7 @@ bool operator ==(const point &A, const point &B);
 #define GRID_NUM 16	//棋盘规模	
 extern int chessBoard[GRID_NUM][GRID_NUM]; //棋盘
 extern int winner;
+extern int remainBlank; // 剩余可用空位
 extern std::vector<point> moveTrace[3];
 extern std::vector<point> moveRecord; // 棋谱记录
 

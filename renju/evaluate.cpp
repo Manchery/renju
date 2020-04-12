@@ -241,7 +241,7 @@ int patternAnalysis(int chengCnt[6][3], int chongCnt[6][3])
 	winMove += (chengCnt[3][2] && chengCnt[4][1]); //活三+半活四型
 	winMove += (chengCnt[4][1] && chongCnt[5][2]); //半活四+冲5型，且这两个棋形不在一起，不会被同时堵死，则必胜
 
-	ret += !!winMove * (winValue / 2);
+	ret += !!winMove * winValue;
 
 	//准必赢、潜力棋型
 	//常数代表“推荐系数”或“期望”，可适当调整

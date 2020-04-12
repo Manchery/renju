@@ -17,6 +17,7 @@ bool makeMove(point pos, int player)
 	zobrist ^= whiteFirst;
 	zobrist ^= MinFirst;
 	moveRecord.push_back(pos);
+	remainBlank--;
 	return true;
 }
 
@@ -30,5 +31,6 @@ bool unMakeMove(int player)
 	moveTrace[player].pop_back();
 	moveRecord.pop_back();
 	chessBoard[pos.x][pos.y] = blank;
+	remainBlank++;
 	return true;
 }

@@ -36,22 +36,43 @@ int getTheIntitative() {
 	}
 }
 
+enum stateSet {NORMAL, INVALID, REGRET_SUCCESS, REGRET_FAILED};
+
+const string stateIndicator[4] = {
+	"请输入指令：",
+	"指令有误，请重新输入：",
+	"悔棋成功，请继续下棋：",
+	"您不需要悔棋，请重新输入指令："
+};
+
 point getUserMove(int eval, point agentLastMove)
 {
-	system("cls");
-	cout << "*************五子棋人机对弈AI*************" << endl;
-	cout << endl; print(); cout << endl;
-	if (!(agentLastMove == point()))
-		cout << "电脑上步落子：(" << agentLastMove.x << "," << agentLastMove.y << ")" << endl;
-	cout << (agent == black ? "黑" : "白") << "棋局面评估: " << ((eval > 0) ? "+" : "") << eval << endl << endl;
-	cout << "输入: move r c  表示落子点（r,c 分别表示行列）" << endl << endl;
-
+	static int state = NORMAL;
+	point lastMove = agentLastMove;
 	while (true) {
+		system("cls");
+		cout << "*************五子棋人机对弈AI*************" << endl;
+		cout << endl; print(); cout << endl;
+		if (!(lastMove == point()))
+			cout << "电脑上步落子：(" << lastMove.x << "," << lastMove.y << ")" << endl;
+		if (lastMove == agentLastMove)
+			cout << (agent == black ? "黑" : "白") << "棋局面评估: " << ((eval > 0) ? "+" : "") << eval << endl << endl;
+		else
+			cout << "局面评估当前不可用" << endl << endl;
+		cout << "输入: move r c  表示落子点（r,c 分别表示行列）" << endl;
+		cout << "输入: regret 来悔棋" << endl << endl;
+		cout << stateIndicator[state];
 		string input;
 		getline(cin, input); //Trim(input);
 		istringstream sin(input);
 		bool fail = false;
-		string order; sin >> order; if (order != "move") fail = true;
+		string order; sin >> order;
+		if (order == "regret")
+		{
+			regret(state, lastMove);
+			continue;
+		}
+		if (order != "move") fail = true;
 		if (!fail) {
 			int x=-1, y=-1;
 			sin >> x >> y;
@@ -60,8 +81,7 @@ point getUserMove(int eval, point agentLastMove)
 			else
 				return point(x, y);
 		}
-		cout << endl << "请重新输入！" << endl;
-		cout << "输入: move r c  表示落子点（r,c 分别表示行列）" << endl << endl;
+		state = INVALID;
 	}
 }
 
@@ -70,6 +90,7 @@ void outputWinner()
 	system("cls");
 	cout << "*************五子棋人机对弈AI*************" << endl;
 	cout << endl; print(); cout << endl;
+	if (winner == draw) { cout << "平局！" << endl; return; }
 	if (winner == agent) cout << "电脑"; else cout << "用户";
 	if (winner == black) cout << "执黑"; else cout << "执白";
 	cout << "获胜。" << endl;
@@ -131,4 +152,19 @@ void writeRecord()
 	{
 		fout << it.x << " " << it.y << endl;
 	}
+}
+
+void regret(int& state, point& lastMove)
+{
+	if (moveRecord.size() >= 2U)
+	{
+		unMakeMove(agent);
+		unMakeMove(user);
+		lastMove = (moveRecord.empty() ? point() : moveRecord.back());
+		state = REGRET_SUCCESS;
+	}
+	else
+	{
+		state = REGRET_FAILED;
+	};
 }

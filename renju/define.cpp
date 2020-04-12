@@ -8,6 +8,7 @@ bool operator ==(const point &A, const point &B) {
 
 int chessBoard[GRID_NUM][GRID_NUM];//定义棋盘
 int winner = blank;
+int remainBlank = 225; // 剩余可用空位
 std::vector<point> moveTrace[3];
 std::vector<point> moveRecord; // 棋谱记录
 std::vector<point> currentBest; // 迭代加深时的当前最优解

@@ -72,6 +72,7 @@ int main()
 		writeRecord();
 	}
 
+	winner = (gameover() == draw ? draw : winner);
 	outputWinner();
 	writeRecord();
 	system("pause");
