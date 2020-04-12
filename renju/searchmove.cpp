@@ -117,7 +117,7 @@ std::pair<point, int> idSearch(unsigned timeout, int depth)
 {
 	unsigned pre = clock();
 	std::pair<point, int> res;
-	int startDepth = 1;
+	long long startDepth = (int)1;
 
 	// a probably optimization
 	if (hashMap.find(zobrist) == hashMap.end()) {
@@ -126,7 +126,7 @@ std::pair<point, int> idSearch(unsigned timeout, int depth)
 	}
 
 	hashMapClean();
-	for (int i = startDepth; ; i++) // search until time out
+	for (long long i = startDepth; ; i++) // search until time out
 	{
 		// hashMap.clear();
 		// TODO: window
