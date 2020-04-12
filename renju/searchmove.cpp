@@ -11,7 +11,7 @@ using namespace std;
 
 std::pair<point, int> searchMove()
 {
-	return idSearch(5000);
+	return idSearch(900);
 }
 
 //static int ran01() { static int x = 31253125; x += (x << 4) + 1; return x & 65536; }
@@ -115,12 +115,12 @@ std::pair<point, int> findHashMap(int current, int depth, int alpha, int beta) {
 
 std::pair<point, int> idSearch(unsigned timeout, int depth)
 {
-	unsigned pre = clock();
+	clock_t pre = clock();
 	std::pair<point, int> res;
 	int startDepth = 1;
 
 	// a probably optimization
-	if (hashMap.find(zobrist) == hashMap.end()) {
+	if (hashMap.find(zobrist) != hashMap.end()) {
 		startDepth = hashMap[zobrist].depth + 1;
 		hashMap[zobrist].time = timeStamp;
 	}
