@@ -139,6 +139,7 @@ std::pair<point, int> idSearch(unsigned timeout, int depth)
 //快速防守
 std::pair<point, int> fastDefend()
 {
+	if (evaluate(agent, agent) >= 500000) return make_pair(point(), 0);
 	int eval = evaluate(user, user);
 
 	//出现了必应棋型
@@ -176,11 +177,11 @@ std::pair<point, int> fastDefend()
 		makeMove(defendMove, agent);
 		int ret = Evaluate(agent);
 		unMakeMove(agent);
-		return std::pair<point, int>(defendMove, ret);
+		return make_pair(defendMove, ret);
 	}
 
 	//未出现必应棋型
-	return std::pair<point, int>(point(), 0);
+	return make_pair(point(), 0);
 }
 
 
