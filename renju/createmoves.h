@@ -8,7 +8,7 @@
 #include <unordered_map>
 #include <vector>
 
-#define MOVE_NUM (9U)											//搜索树的最大分支数
+#define MOVE_NUM (8U)											//搜索树的最大分支数
 #define DEFEND_NUM (3U)											//保证用于防守策略的分支数
 
 //搜索队列

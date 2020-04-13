@@ -17,7 +17,7 @@ std::pair<point, int> searchMove()
 	if (!(res.first == point())) return res;
 
 	//迭代加深搜索
-	return idSearch(5000U);
+	return idSearch(900U);
 }
 
 //带alpha-beta剪枝的Minimax搜索算法
@@ -188,8 +188,12 @@ std::pair<point, int> fastDefend()
 					}
 				}
 				unMakeMove(agent);
+	//			cout << "( " << i << ", " << j << " ) : " << curDamage << endl;
 			}
-		return std::pair<point, int>(defendMove, Evaluate(agent));
+		makeMove(defendMove, agent);
+		int ret = Evaluate(agent);
+		unMakeMove(agent);
+		return std::pair<point, int>(defendMove, ret);
 	}
 
 	//未出现必应棋型
