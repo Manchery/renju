@@ -17,7 +17,7 @@ std::pair<point, int> searchMove()
 	if (!(res.first == point())) return res;
 
 	//迭代加深搜索
-	return idSearch();
+	return idSearch(900U);
 }
 
 
@@ -171,8 +171,12 @@ std::pair<point, int> fastDefend()
 					}
 				}
 				unMakeMove(agent);
+	//			cout << "( " << i << ", " << j << " ) : " << curDamage << endl;
 			}
-		return std::pair<point, int>(defendMove, Evaluate(agent));
+		makeMove(defendMove, agent);
+		int ret = Evaluate(agent);
+		unMakeMove(agent);
+		return std::pair<point, int>(defendMove, ret);
 	}
 
 	//未出现必应棋型
