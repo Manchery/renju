@@ -2,7 +2,6 @@
 #include <cstring>
 using namespace std;
 
-//点对运算符的重载
 bool operator ==(const point &A, const point &B) {
 	return A.x == B.x && A.y == B.y;
 }
@@ -14,9 +13,3 @@ std::vector<point> moveRecord;							//下棋记录
 int agent;												//AI扮演的角色(黑棋/白棋)
 int user;												//玩家扮演的角色(与AI相反)
 int timeStamp;											//时间戳
-
-//清空记录
-void clearAll() {
-	agent = user = winner = blank;
-	memset(chessBoard, 0, sizeof(chessBoard));
-}

@@ -1,4 +1,3 @@
-#include "define.h"
 #include "evaluate.h"
 #include <algorithm>
 #include <cmath>
@@ -94,12 +93,12 @@ int evaluate(int player, int current)
 				int leftUnblocked = !(l - 1 == 0 || chessBoard[i][l - 1] == opposite(player));
 				int rightUnblocked = !(r + 1 == n + 1 || chessBoard[i][r + 1] == opposite(player));
 				eval += cheng[min(r - l + 1, 5)][leftUnblocked + rightUnblocked];
-				eval += (player == current)*xianShouCheng[min(r - l + 1, 5)][leftUnblocked + rightUnblocked];
+				eval += (player == current) * xianShouCheng[min(r - l + 1, 5)][leftUnblocked + rightUnblocked];
 				chengCnt[min((r - l + 1), 5)][leftUnblocked + rightUnblocked]++;
 				// 冲
 				if (lastR != -1 && lastR == l - 2 && chessBoard[i][l - 1] == blank) {
 					eval += chong[min(r - lastL + 1, 5)][lastLB + rightUnblocked];
-					eval += (player == current)*xianShouChong[min(r - lastL + 1, 5)][lastLB + rightUnblocked];
+					eval += (player == current) * xianShouChong[min(r - lastL + 1, 5)][lastLB + rightUnblocked];
 					chongCnt[min(r - lastL + 1, 5)][lastLB + rightUnblocked]++;
 				}
 				lastL = l; lastR = r; lastLB = leftUnblocked; lastRB = rightUnblocked;
@@ -120,12 +119,12 @@ int evaluate(int player, int current)
 				int leftUnblocked = !(l - 1 == 0 || chessBoard[l - 1][j] == opposite(player));
 				int rightUnblocked = !(r + 1 == n + 1 || chessBoard[r + 1][j] == opposite(player));
 				eval += cheng[min(r - l + 1, 5)][leftUnblocked + rightUnblocked];
-				eval += (player == current)*xianShouCheng[min(r - l + 1, 5)][leftUnblocked + rightUnblocked];
+				eval += (player == current) * xianShouCheng[min(r - l + 1, 5)][leftUnblocked + rightUnblocked];
 				chengCnt[min((r - l + 1), 5)][leftUnblocked + rightUnblocked]++;
 				// 冲
 				if (lastR != -1 && lastR == l - 2 && chessBoard[l - 1][j] == blank) {
 					eval += chong[min(r - lastL + 1, 5)][lastLB + rightUnblocked];
-					eval += (player == current)*xianShouChong[min(r - lastL + 1, 5)][lastLB + rightUnblocked];
+					eval += (player == current) * xianShouChong[min(r - lastL + 1, 5)][lastLB + rightUnblocked];
 					chongCnt[min(r - lastL + 1, 5)][lastLB + rightUnblocked]++;
 				}
 				lastL = l; lastR = r; lastLB = leftUnblocked; lastRB = rightUnblocked;
@@ -147,12 +146,12 @@ int evaluate(int player, int current)
 				int leftUnblocked = !(l - 1 == minJ - 1 || chessBoard[s - (l - 1)][l - 1] == opposite(player));
 				int rightUnblocked = !(r + 1 == maxJ + 1 || chessBoard[s - (r + 1)][r + 1] == opposite(player));
 				eval += cheng[min(r - l + 1, 5)][leftUnblocked + rightUnblocked];
-				eval += (player == current)*xianShouCheng[min(r - l + 1, 5)][leftUnblocked + rightUnblocked];
+				eval += (player == current) * xianShouCheng[min(r - l + 1, 5)][leftUnblocked + rightUnblocked];
 				chengCnt[min((r - l + 1), 5)][leftUnblocked + rightUnblocked]++;
 				// 冲
 				if (lastR != -1 && lastR == l - 2 && chessBoard[s - (l - 1)][l - 1] == blank) {
 					eval += chong[min(r - lastL + 1, 5)][lastLB + rightUnblocked];
-					eval += (player == current)*xianShouChong[min(r - lastL + 1, 5)][lastLB + rightUnblocked];
+					eval += (player == current) * xianShouChong[min(r - lastL + 1, 5)][lastLB + rightUnblocked];
 					chongCnt[min(r - lastL + 1, 5)][lastLB + rightUnblocked]++;
 				}
 				lastL = l; lastR = r; lastLB = leftUnblocked; lastRB = rightUnblocked;
@@ -174,12 +173,12 @@ int evaluate(int player, int current)
 				int leftUnblocked = !(l - 1 == minJ - 1 || chessBoard[s + (l - 1)][l - 1] == opposite(player));
 				int rightUnblocked = !(r + 1 == maxJ + 1 || chessBoard[s + (r + 1)][r + 1] == opposite(player));
 				eval += cheng[min(r - l + 1, 5)][leftUnblocked + rightUnblocked];
-				eval += (player == current)*xianShouCheng[min(r - l + 1, 5)][leftUnblocked + rightUnblocked];
+				eval += (player == current) * xianShouCheng[min(r - l + 1, 5)][leftUnblocked + rightUnblocked];
 				chengCnt[min((r - l + 1), 5)][leftUnblocked + rightUnblocked]++;
 				// 冲
 				if (lastR != -1 && lastR == l - 2 && chessBoard[s + (l - 1)][l - 1] == blank) {
 					eval += chong[min(r - lastL + 1, 5)][lastLB + rightUnblocked];
-					eval += (player == current)*xianShouChong[min(r - lastL + 1, 5)][lastLB + rightUnblocked];
+					eval += (player == current) * xianShouChong[min(r - lastL + 1, 5)][lastLB + rightUnblocked];
 					chongCnt[min(r - lastL + 1, 5)][lastLB + rightUnblocked]++;
 				}
 				lastL = l; lastR = r; lastLB = leftUnblocked; lastRB = rightUnblocked;
@@ -189,7 +188,6 @@ int evaluate(int player, int current)
 	}
 	return patternAnalysis(chengCnt, chongCnt) + eval;
 }
-
 
 static constexpr int Dx[] = { 1,0,1,1 };						//搜索方向控制
 static constexpr int Dy[] = { 0,1,1,-1 };
@@ -245,7 +243,7 @@ int patternAnalysis(int chengCnt[6][3], int chongCnt[6][3])
 	winMove += ((chongCnt[5][0] + chongCnt[5][1] + chongCnt[5][2]) > 1); //双冲五型
 	winMove += (chengCnt[3][2] && chengCnt[4][1]); //活三+半活四型
 	winMove += (chengCnt[4][1] && chongCnt[5][2]); //半活四+冲5型，且这两个棋形不在一起，不会被同时堵死，则必胜
-	ret += !!winMove * (winValue / 2);
+	ret += (!!winMove) * (winValue / 2);
 
 	//准必赢、潜力棋型
 	goodTry += 50 * (chengCnt[3][2] && chongCnt[5][2]); //活三+冲5型,有一定概率被堵死（.OOO.O.）,但可以尝试
