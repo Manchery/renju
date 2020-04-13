@@ -17,8 +17,9 @@ std::pair<point, int> searchMove()
 	if (!(res.first == point())) return res;
 
 	//迭代加深搜索
-	return idSearch(5000U);
+	return idSearch();
 }
+
 
 //带alpha-beta剪枝的Minimax搜索算法
 //current : 当前 player
@@ -37,23 +38,25 @@ std::pair<point, int> MiniMax(int current, int depth, int alpha, int beta) {
 		return make_pair(point(), v);
 	}
 
-	//利用上一次搜索时保存在哈希表中的信息
-	//指导本次搜索的顺序，并生成搜索队列
+	//上一次搜索时保存在哈希表中的行动优先搜索
 	point priorMove = hashResult.first;
+	// 生成待搜索的扩展集
 	vector<point> moveList = createMoves(current);
 	int exploreLen = moveList.size();
+	int tmpWinner;
 
 	if (current == agent) { // 极大搜索
 		point optMove;
 		int v = -inf, newv;
-		for (int i = -1; i < exploreLen; i++) {
+		for (int i = -1; exploreLen && i < (int)moveList.size(); i++) { // i==-1 优先搜索 priorMove
 			point currentMove = i == -1 ? priorMove : moveList[i];
 			if (currentMove == point() || (i >= 0 && currentMove == priorMove))
 				continue;
+			exploreLen--;
 
 			if (makeMove(currentMove, current)) {
-				if (gameover(currentMove, current))
-					newv = winValue;
+				if (tmpWinner = gameover(currentMove, current))
+					newv = tmpWinner == current ? winValue : 0;
 				else
 					newv = MiniMax(opposite(current), depth - 1, alpha, beta).second;
 				if (newv > v)
@@ -76,14 +79,16 @@ std::pair<point, int> MiniMax(int current, int depth, int alpha, int beta) {
 	else { // 极小搜索
 		point optMove;
 		int v = inf, newv;
-		for (int i = -1; i < exploreLen; i++) {
+		for (int i = -1; exploreLen && i < (int)moveList.size(); i++) { // i==-1 优先搜索 priorMove
 			point currentMove = i == -1 ? priorMove : moveList[i];
 			if (currentMove == point() || (i >= 0 && currentMove == priorMove))
 				continue;
+			exploreLen--;
 
 			if (makeMove(currentMove, current)) {
-				if (gameover(currentMove, current))
-					newv = -(int)(winValue * pow(0.95, (SEARCH_DEPTH - depth) >> 1)); // 考虑玩家是非理性人，算力有限
+				if (tmpWinner = gameover(currentMove, current))
+					// 考虑玩家是非理性人，算力有限
+					newv = tmpWinner == current ? (-(int)(winValue * pow(0.95, (SEARCH_DEPTH - depth) >> 1))) : 0;
 				else
 					newv = MiniMax(opposite(current), depth - 1, alpha, beta).second;
 				if (newv < v)
@@ -105,25 +110,6 @@ std::pair<point, int> MiniMax(int current, int depth, int alpha, int beta) {
 	}
 }
 
-//查找当前局面的哈希值
-std::pair<point, int> findHashMap(int current, int depth, int alpha, int beta) {
-	if (hashMap.find(zobrist) == hashMap.end()) return std::make_pair(point(), hashUnknowValue);
-	hashNode &node = hashMap[zobrist];
-	node.time = timeStamp;
-	if (node.depth >= depth) {
-		if (node.flag == Exact)
-			return make_pair(node.move, node.value);
-		if (current == agent) { // MAX
-			if (node.flag == Upper && node.value >= beta)
-				return make_pair(node.move, node.value);
-		}
-		else { // MIN
-			if (node.flag == Lower && node.value <= alpha)
-				return make_pair(node.move, node.value);
-		}
-	}
-	return std::make_pair(node.move, hashUnknowValue);
-}
 
 //迭代加深搜索
 std::pair<point, int> idSearch(unsigned timeout, int depth)
@@ -139,8 +125,8 @@ std::pair<point, int> idSearch(unsigned timeout, int depth)
 		hashMap[zobrist].time = timeStamp;
 	}
 
-	//迭代加深搜索，直到耗尽时间
 	hashMapClean();
+	//迭代加深搜索，直到耗尽时间
 	for (long long i = startDepth; ; i++)
 	{
 		res = MiniMax(agent, i, -inf, inf);
@@ -175,12 +161,9 @@ std::pair<point, int> fastDefend()
 				}
 				else if (curDamage == minDamage)
 				{
-					//引入随机性
-					//以50%概率接受相同估值的解
 					auto curAgentEval = evaluate(agent, user);
 					if ((defendMove == point()) ||
-						(curAgentEval > agentEval) ||
-						((rand() % 2) && (curAgentEval == agentEval)))
+						(curAgentEval > agentEval))
 					{
 						minDamage = curDamage;
 						agentEval = curAgentEval;
@@ -196,7 +179,28 @@ std::pair<point, int> fastDefend()
 	return std::pair<point, int>(point(), 0);
 }
 
-//记录哈希值
+
+//查找当前局面
+std::pair<point, int> findHashMap(int current, int depth, int alpha, int beta) {
+	if (hashMap.find(zobrist) == hashMap.end()) return std::make_pair(point(), hashUnknowValue);
+	hashNode & node = hashMap[zobrist];
+	node.time = timeStamp;
+	if (node.depth >= depth) {
+		if (node.flag == Exact)
+			return make_pair(node.move, node.value);
+		if (current == agent) { // MAX
+			if (node.flag == Upper && node.value >= beta)
+				return make_pair(node.move, node.value);
+		}
+		else { // MIN
+			if (node.flag == Lower && node.value <= alpha)
+				return make_pair(node.move, node.value);
+		}
+	}
+	return std::make_pair(node.move, hashUnknowValue);
+}
+
+//记录当前局面
 void recordHashMap(int depth, hashFlag flag, int value, point move) {
 	if (hashMap.find(zobrist) == hashMap.end() || hashMap[zobrist].depth < depth ||
 		(hashMap[zobrist].depth == depth && flag == Exact)) {

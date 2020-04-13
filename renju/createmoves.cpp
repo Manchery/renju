@@ -38,7 +38,8 @@ std::vector<point> createMoves(int player)
 	//搜索有利于自己胜利的落子点
 	for (int i = 1; i <= n; i++)
 		for (int j = 1; j <= n; j++)
-			if (chessBoard[i][j] == blank) {
+			if (chessBoard[i][j] == blank && 
+				find(defends.begin(), defends.end(), point(i,j))==defends.end()) {
 				moves.push_back(point(i, j));
 				eval[i][j] = evaluateStep(player, i, j);
 			}
