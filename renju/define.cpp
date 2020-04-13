@@ -13,7 +13,6 @@ int remainBlank = 225;									//棋盘中的剩余可用空位
 std::vector<point> moveRecord;							//下棋记录
 int agent;												//AI扮演的角色(黑棋/白棋)
 int user;												//玩家扮演的角色(与AI相反)
-int getRecord;											//是否检测到记录的棋谱
 int timeStamp;											//时间戳
 
 //清空记录

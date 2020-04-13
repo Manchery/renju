@@ -18,8 +18,6 @@ hash_t rand64();
 void initHashValue();
 
 //哈希要用到的局面信息
-enum colorFirst { blackFirst, whiteFirst };
-enum whoFirst { MinFirst, MaxFirst };
 enum hashFlag { Exact, Lower, Upper };
 
 //哈希节点

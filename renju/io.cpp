@@ -17,7 +17,7 @@ void Trim(string & str)
 	str.erase(str.find_last_not_of(blanks) + 1);
 }
 
-//程序初始化
+//询问先手
 int getTheIntitative() {
 	system("cls");
 	cout << "*************五子棋人机对弈AI*************" << endl;
@@ -61,7 +61,7 @@ point getUserMove(int eval, point agentLastMove)
 		if (lastMove == agentLastMove)
 			cout << (agent == black ? "黑" : "白") << "棋局面评估: " << ((eval > 0) ? "+" : "") << eval << endl << endl;
 		else
-			cout << "局面评估当前不可用" << endl << endl;
+			cout << "局面评估当前不可用，需等到电脑再次落子" << endl << endl;
 		cout << "输入: move r c  表示落子点（r,c 分别表示行列）" << endl;
 		cout << "输入: regret 来悔棋" << endl << endl;
 		cout << stateIndicator[state];
@@ -114,21 +114,14 @@ bool readRecord()
 {
 	ifstream fin(".\\record.txt");
 	fin >> agent;
-	if (!agent) return false;
-	if (agent)
-	{
-		cout << "检测到棋谱，是否读入？[Y/N]";
-		string input;
-		getline(cin, input); Trim(input);
-		char ch = 'N';
-		if (input.length() > 0) ch = input[0];
-		if (!(ch == 'Y' || ch == 'y'))
-		{
-			return false;
-		}
-	}
-
-	if (agent == white) zobrist ^= whiteFirst;
+	if (agent != black && agent != white) return false;
+	
+	cout << "检测到棋谱，是否读入？[Y/N]";
+	string input;
+	getline(cin, input); Trim(input);
+	char ch = 'N';
+	if (input.length() > 0) ch = input[0];
+	if (!(ch == 'Y' || ch == 'y')) return false;
 
 	int x, y, cur = black;
 	while (!fin.eof() && fin.good())
@@ -137,10 +130,12 @@ bool readRecord()
 		if (makeMove(point(x, y), cur))
 		{
 			cur = opposite(cur);
-			getRecord++;
 			timeStamp++;
 		}
 	}
+
+	if (cur == white) zobrist ^= whiteFirstValue;
+	if (cur != agent) zobrist ^= MinFirstValue;
 
 	return true;
 }
@@ -170,5 +165,5 @@ void regret(int& state, point& lastMove)
 	else
 	{
 		state = REGRET_FAILED;
-	};
+	}
 }

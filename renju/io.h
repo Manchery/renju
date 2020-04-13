@@ -3,7 +3,7 @@
 #include "define.h"
 #include <algorithm>
 
-//程序初始化
+//询问先手
 int getTheIntitative();
 
 //等待用户输入

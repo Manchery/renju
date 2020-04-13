@@ -15,8 +15,8 @@ bool makeMove(point pos, int player)
 	if (chessBoard[pos.x][pos.y] != blank) return false;
 	chessBoard[pos.x][pos.y] = player;
 	zobrist ^= zobristValue[pos.x][pos.y][player];
-	zobrist ^= whiteFirst;
-	zobrist ^= MinFirst;
+	zobrist ^= whiteFirstValue;
+	zobrist ^= MinFirstValue;
 	moveRecord.push_back(pos);
 	remainBlank--;
 	return true;
@@ -26,10 +26,10 @@ bool makeMove(point pos, int player)
 bool unMakeMove(int player)
 {
 	point pos = moveRecord.back();
-	zobrist ^= zobristValue[pos.x][pos.y][player];
-	zobrist ^= whiteFirst;
-	zobrist ^= MinFirst;
 	moveRecord.pop_back();
+	zobrist ^= zobristValue[pos.x][pos.y][player];
+	zobrist ^= whiteFirstValue;
+	zobrist ^= MinFirstValue;
 	chessBoard[pos.x][pos.y] = blank;
 	remainBlank++;
 	return true;
