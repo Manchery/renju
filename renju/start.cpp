@@ -8,17 +8,17 @@
 
 int main()
 {
-	//¹þÏ£³õÊ¼»¯
+	//ï¿½ï¿½Ï£ï¿½ï¿½Ê¼ï¿½ï¿½
 	initHashValue();
 
-	//¶ÁÈë¼ÇÂ¼
+	//ï¿½ï¿½ï¿½ï¿½ï¿½Â¼
 	if (!readRecord()) {
-		agent = getTheIntitative(); // Ñ¯ÎÊÏÈÊÖ
-		if (agent == white) zobrist ^= whiteFirstValue;
+		agent = getTheIntitative(); // Ñ¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		if (agent == white) zobrist ^= MinFirstValue;
 	}
 	user = agent == black ? white : black;
 
-	//ÖÕ¾ÖÅÐ¶¨
+	//ï¿½Õ¾ï¿½ï¿½Ð¶ï¿½
 	if (winner = gameover())
 	{
 		outputWinner();
@@ -29,7 +29,7 @@ int main()
 	point agentLastMove(0, 0);
 	int eval = 0;
 
-	//AI¼ÆËãµÚÒ»²½Æå
+	//AIï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½
 	if ((agent == black && moveRecord.size() % 2 == 0) || 
 		(agent == white && moveRecord.size() % 2 == 1))
 	{
@@ -43,7 +43,7 @@ int main()
 		winner = gameover(agentMove, agent);
 	}
 
-	//AIºÍÍæ¼ÒÂÖÁ÷²Ù×÷
+	//AIï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	while (!winner) {
 	    point userMove = getUserMove(eval, agentLastMove);
 		makeMove(userMove, user);
@@ -62,8 +62,8 @@ int main()
 		writeRecord();
 	}
 
-	//ÅÐ¶¨ÖÕ¾ÖÊ±µÄÓÎÏ·×´Ì¬
-	//²¢±£´æÏà¹ØÐÅÏ¢
+	//ï¿½Ð¶ï¿½ï¿½Õ¾ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Ï·×´Ì¬
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
 	outputWinner();
 	writeRecord();
 	system("pause");
