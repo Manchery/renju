@@ -9,7 +9,7 @@
 #include <string>
 using namespace std;
 
-//×Ö·û´®´¦Àí
+//ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 void Trim(string & str)
 {
 	string blanks("\f\v\r\t\n ");
@@ -17,13 +17,13 @@ void Trim(string & str)
 	str.erase(str.find_last_not_of(blanks) + 1);
 }
 
-//Ñ¯ÎÊÏÈÊÖ
+//Ñ¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 int getTheIntitative() {
 	system("cls");
-	cout << "*************Îå×ÓÆåÈË»ú¶ÔÞÄAI*************" << endl;
+	cout << "*************ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë»ï¿½ï¿½ï¿½ï¿½ï¿½AI*************" << endl;
 	cout << endl; print(); cout << endl;
-	cout << "ÊäÈë: newblack  µçÄÔÏÈÊÖ" << endl;
-	cout << "ÊäÈë: newwhite  µçÄÔºóÊÖ" << endl << endl;
+	cout << "ï¿½ï¿½ï¿½ï¿½: newblack  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" << endl;
+	cout << "ï¿½ï¿½ï¿½ï¿½: newwhite  ï¿½ï¿½ï¿½Ôºï¿½ï¿½ï¿½" << endl << endl;
 
 	while (true) {
 		string input;
@@ -31,39 +31,39 @@ int getTheIntitative() {
 		if (input == "newblack") return black;
 		else if (input == "newwhite") return white;
 		else {
-			cout << endl << "ÇëÖØÐÂÊäÈë£¡" << endl;
-			cout << "ÊäÈë: newblack  µçÄÔÏÈÊÖ" << endl;
-			cout << "ÊäÈë: newwhite  µçÄÔºóÊÖ" << endl << endl;
+			cout << endl << "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ë£¡" << endl;
+			cout << "ï¿½ï¿½ï¿½ï¿½: newblack  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" << endl;
+			cout << "ï¿½ï¿½ï¿½ï¿½: newwhite  ï¿½ï¿½ï¿½Ôºï¿½ï¿½ï¿½" << endl << endl;
 		}
 	}
 }
 
-enum stateSet {NORMAL, INVALID, REGRET_SUCCESS, REGRET_FAILED}; //ÊäÈëµÄºÏ·¨ÐÔÑéÖ¤
+enum stateSet {NORMAL, INVALID, REGRET_SUCCESS, REGRET_FAILED}; //ï¿½ï¿½ï¿½ï¿½ÄºÏ·ï¿½ï¿½ï¿½ï¿½ï¿½Ö¤
 
-const string stateIndicator[4] = {								//ÌáÊ¾ÐÅÏ¢
-	"ÇëÊäÈëÖ¸Áî£º",
-	"Ö¸ÁîÓÐÎó£¬ÇëÖØÐÂÊäÈë£º",
-	"»ÚÆå³É¹¦£¬Çë¼ÌÐøÏÂÆå£º",
-	"Äú²»ÐèÒª»ÚÆå£¬ÇëÖØÐÂÊäÈëÖ¸Áî£º"
+const string stateIndicator[4] = {								//ï¿½ï¿½Ê¾ï¿½ï¿½Ï¢
+	"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½î£º",
+	"Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ë£º",
+	"ï¿½ï¿½ï¿½ï¿½É¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½å£º",
+	"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½å£¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½î£º"
 };
 
-//µÈ´ýÓÃ»§ÊäÈë
+//ï¿½È´ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½
 point getUserMove(int eval, point agentLastMove)
 {
 	static int state = NORMAL;
 	point lastMove = agentLastMove;
 	while (true) {
 		system("cls");
-		cout << "*************Îå×ÓÆåÈË»ú¶ÔÞÄAI*************" << endl;
+		cout << "*************ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë»ï¿½ï¿½ï¿½ï¿½ï¿½AI*************" << endl;
 		cout << endl; print(); cout << endl;
 		if (!(lastMove == point()))
-			cout << "µçÄÔÉÏ²½Âä×Ó£º(" << lastMove.x << "," << lastMove.y << ")" << endl;
+			cout << "ï¿½ï¿½ï¿½ï¿½ï¿½Ï²ï¿½ï¿½ï¿½ï¿½Ó£ï¿½(" << lastMove.x << "," << lastMove.y << ")" << endl;
 		if (lastMove == agentLastMove)
-			cout << (agent == black ? "ºÚ" : "°×") << "Æå¾ÖÃæÆÀ¹À: " << ((eval > 0) ? "+" : "") << eval << endl << endl;
+			cout << (agent == black ? "ï¿½ï¿½" : "ï¿½ï¿½") << "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: " << ((eval > 0) ? "+" : "") << eval << endl << endl;
 		else
-			cout << "¾ÖÃæÆÀ¹Àµ±Ç°²»¿ÉÓÃ£¬ÐèµÈµ½µçÄÔÔÙ´ÎÂä×Ó" << endl << endl;
-		cout << "ÊäÈë: move r c  ±íÊ¾Âä×Óµã£¨r,c ·Ö±ð±íÊ¾ÐÐÁÐ£©" << endl;
-		cout << "ÊäÈë: regret À´»ÚÆå" << endl << endl;
+			cout << "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½Ã£ï¿½ï¿½ï¿½Èµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ù´ï¿½ï¿½ï¿½ï¿½ï¿½" << endl << endl;
+		cout << "ï¿½ï¿½ï¿½ï¿½: move r c  ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½Óµã£¨r,c ï¿½Ö±ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½Ð£ï¿½" << endl;
+		cout << "ï¿½ï¿½ï¿½ï¿½: regret ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" << endl << endl;
 		cout << stateIndicator[state];
 		string input;
 		getline(cin, input);
@@ -88,35 +88,35 @@ point getUserMove(int eval, point agentLastMove)
 	}
 }
 
-//Êä³öÓ®¼Ò
+//ï¿½ï¿½ï¿½Ó®ï¿½ï¿½
 void outputWinner()
 {
 	system("cls");
-	cout << "*************Îå×ÓÆåÈË»ú¶ÔÞÄAI*************" << endl;
+	cout << "*************ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë»ï¿½ï¿½ï¿½ï¿½ï¿½AI*************" << endl;
 	cout << endl; print(); cout << endl;
-	if (winner == draw) { cout << "Æ½¾Ö£¡" << endl; return; }
-	if (winner == agent) cout << "µçÄÔ"; else cout << "ÓÃ»§";
-	if (winner == black) cout << "Ö´ºÚ"; else cout << "Ö´°×";
-	cout << "»ñÊ¤¡£" << endl;
+	if (winner == draw) { cout << "Æ½ï¿½Ö£ï¿½" << endl; return; }
+	if (winner == agent) cout << "ï¿½ï¿½ï¿½ï¿½"; else cout << "ï¿½Ã»ï¿½";
+	if (winner == black) cout << "Ö´ï¿½ï¿½"; else cout << "Ö´ï¿½ï¿½";
+	cout << "ï¿½ï¿½Ê¤ï¿½ï¿½" << endl;
 }
 
-//AI¼ÆËãÊ±µÄµÈ´ý½çÃæ
+//AIï¿½ï¿½ï¿½ï¿½Ê±ï¿½ÄµÈ´ï¿½ï¿½ï¿½ï¿½ï¿½
 void userWaiting()
 {
 	system("cls");
-	cout << "*************Îå×ÓÆåÈË»ú¶ÔÞÄAI*************" << endl;
+	cout << "*************ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë»ï¿½ï¿½ï¿½ï¿½ï¿½AI*************" << endl;
 	cout << endl; print(); cout << endl;
-	cout << "µçÄÔË¼¿¼ÖÐ..." << endl;
+	cout << "ï¿½ï¿½ï¿½ï¿½Ë¼ï¿½ï¿½ï¿½ï¿½..." << endl;
 }
 
-//¶ÁÈë¼ÇÂ¼ÒÔ½øÐÐ¸´ÅÌ
+//ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½Ô½ï¿½ï¿½Ð¸ï¿½ï¿½ï¿½
 bool readRecord()
 {
 	ifstream fin(".\\record.txt");
 	fin >> agent;
 	if (agent != black && agent != white) return false;
 	
-	cout << "¼ì²âµ½ÆåÆ×£¬ÊÇ·ñ¶ÁÈë£¿[Y/N]";
+	cout << "ï¿½ï¿½âµ½ï¿½ï¿½ï¿½×£ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ë£¿[Y/N]";
 	string input;
 	getline(cin, input); Trim(input);
 	char ch = 'N';
@@ -124,6 +124,7 @@ bool readRecord()
 	if (!(ch == 'Y' || ch == 'y')) return false;
 
 	int x, y, cur = black;
+	if (agent == white) zobrist ^= MinFirstValue;
 	while (!fin.eof() && fin.good())
 	{
 		fin >> x >> y;
@@ -134,13 +135,10 @@ bool readRecord()
 		}
 	}
 
-	if (cur == white) zobrist ^= whiteFirstValue;
-	if (cur != agent) zobrist ^= MinFirstValue;
-
 	return true;
 }
 
-//±£´æ¼ÇÂ¼
+//ï¿½ï¿½ï¿½ï¿½ï¿½Â¼
 void writeRecord()
 {
 	ofstream fout(".\\record.txt");
@@ -152,7 +150,7 @@ void writeRecord()
 	}
 }
 
-//»ÚÆå
+//ï¿½ï¿½ï¿½ï¿½
 void regret(int& state, point& lastMove)
 {
 	if (moveRecord.size() >= 2U)
