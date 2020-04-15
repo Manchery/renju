@@ -17,7 +17,11 @@ std::pair<point, int> searchMove()
 	if (!(res.first == point())) return res;
 
 	//µü´ú¼ÓÉîËÑË÷
-	return idSearch(900U);
+	static int firstSearch = 1;
+	if (firstSearch)
+		return idSearch(1800U);
+	else
+		return idSearch(900U);
 }
 
 
