@@ -10,7 +10,9 @@
 #include <algorithm>
 
 #define SEARCH_DEPTH (12)										//参考的最大搜索深度
-#define TIME_ALLOWED (5000U)									//迭代加深搜索的最长时间限制
+#define TIME_ALLOWED (5.0)										//迭代加深搜索的最长时间限制，单位：秒
+
+extern clock_t start_clock;										//开始搜索的时间
 
 //搜索的入口函数
 std::pair<point, int> searchMove(); 
@@ -20,7 +22,7 @@ std::pair<point, int> searchMove();
 std::pair<point, int> MiniMax(int current, int depth, int alpha, int beta);
 
 //迭代加深搜索
-std::pair<point, int> idSearch(unsigned timeout = TIME_ALLOWED, int depth = SEARCH_DEPTH);
+std::pair<point, int> idSearch();
 
 //快速防守
 std::pair<point, int> fastDefend();

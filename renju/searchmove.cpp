@@ -9,19 +9,17 @@
 #include <cmath>
 using namespace std;
 
+clock_t start_clock;											//开始搜索的时间
+
 //搜索的入口函数
 std::pair<point, int> searchMove()
 {
-	//对于必应棋型进行快速防守
-	auto res = fastDefend();
-	if (!(res.first == point())) return res;
+//	对于必应棋型进行快速防守
+//	auto res = fastDefend();
+//	if (!(res.first == point())) return res;
 
 	//迭代加深搜索
-	static int firstSearch = 1;
-	if (firstSearch)
-		return idSearch(1800U);
-	else
-		return idSearch(900U);
+	return idSearch();
 }
 
 
@@ -67,7 +65,7 @@ std::pair<point, int> MiniMax(int current, int depth, int alpha, int beta) {
 				{
 					v = newv, optMove = currentMove;
 				}
-				if (v >= beta) {
+				if (v >= beta || clock() - start_clock > (clock_t)(TIME_ALLOWED * CLOCKS_PER_SEC)) {
 					unMakeMove(current);
 					recordHashMap(depth, Upper, v, optMove);
 					return make_pair(optMove, v);
@@ -99,7 +97,7 @@ std::pair<point, int> MiniMax(int current, int depth, int alpha, int beta) {
 				{
 					v = newv, optMove = currentMove;
 				}
-				if (v <= alpha) {
+				if (v <= alpha || clock() - start_clock > (clock_t)(TIME_ALLOWED * CLOCKS_PER_SEC)) {
 					unMakeMove(current);
 					recordHashMap(depth, Lower, v, optMove);
 					return make_pair(optMove, v);
@@ -116,9 +114,9 @@ std::pair<point, int> MiniMax(int current, int depth, int alpha, int beta) {
 
 
 //迭代加深搜索
-std::pair<point, int> idSearch(unsigned timeout, int depth)
+std::pair<point, int> idSearch()
 {
-	clock_t pre = clock();
+	start_clock = clock();
 	std::pair<point, int> res;
 	long long startDepth = 1;
 
@@ -135,7 +133,7 @@ std::pair<point, int> idSearch(unsigned timeout, int depth)
 	{
 		res = MiniMax(agent, i, -inf, inf);
 		if (res.second >= winValue) return res;
-		if (clock() - pre >= timeout) break;
+		if (clock() - start_clock >= (clock_t)(TIME_ALLOWED * CLOCKS_PER_SEC)) break;
 	}
 	return res;
 }
