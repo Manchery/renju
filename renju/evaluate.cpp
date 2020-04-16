@@ -44,8 +44,6 @@ const int xianShouChong[6][3] = {
 };
 
 //落子点的自带权重分布表
-//Reference: [五子棋中的人工智能（一）：局面估计_人工智能_zhulong890816的专栏 - CSDN博客] 
-//(https://blog.csdn.net/zhulong890816/article/details/45459289)
 const int PosValue[GRID_NUM][GRID_NUM] =
 {
 	{0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0},
