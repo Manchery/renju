@@ -25,11 +25,13 @@ string whiteName("IDSearch");
 const int Round = 10;
 
 void evaluateHashEffiency();
+void evaluateIDSearchEfficiency();
 
 int main() {
 	//evaluateHashEffiency();
+	evaluateIDSearchEfficiency();
 
-	int blackWin = 0, whiteWin = 0; int winner;
+	/*int blackWin = 0, whiteWin = 0; int winner;
 	vector<int> winnerList, timeList;
 	for (int i = 1; i <= Round; i++) {
 		cl(chessBoard); remainBlank = 225;
@@ -83,7 +85,7 @@ int main() {
 	printf("对局完毕，黑方已胜:白方已胜:平局 = %d:%d:%d\n", blackWin, whiteWin, Round - blackWin - whiteWin);
 	for (int i = 0; i < Round; i++) {
 		printf("第 %d 局，winner = %s, 双方总步数 = %d\n", i + 1, winnerList[i] == black ? "black" : "white", timeList[i]);
-	}
+	}*/
 
 	system("pause");
 	return 0;
@@ -138,6 +140,62 @@ void evaluateHashEffiency() {
 	for (int i = 1; i <= MAX_DEPTH; i++) {
 		printf("depth = %d，AlphaBeta 平均等效分支因子 = %.3lf，HashMap 平均等效分支因子 = %.3lf\n",
 			i, AlphaBeta::branchFact[i], HashMap::branchFact[i]);
+	}
+
+#undef HereAgentBlack
+#undef HereAgentWhite
+}
+
+void evaluateIDSearchEfficiency() {
+#define HereAgentBlack HashMap
+	string blackName("HashMap");
+#define HereAgentWhite IDSearch
+	string whiteName("IDSearch");
+
+	int blackWin = 0, whiteWin = 0; int winner;
+	cl(chessBoard); remainBlank = 225;
+	HereAgentBlack::clearAll(); HereAgentBlack::initHashValue();
+	HereAgentWhite::clearAll(); HereAgentWhite::initHashValue();
+	HereAgentBlack::agent = HereAgentWhite::user = black;
+	HereAgentWhite::agent = HereAgentBlack::user = white;
+	HereAgentWhite::zobrist ^= HereAgentWhite::MinFirstValue;
+
+	int timeStamp = 0;
+	while (true) {
+		Print(1, blackWin, whiteWin, blackName, whiteName, black);
+		//point blackPos = HereAgentBlack::searchMove().first;
+		point blackPos;
+		for (int i = 1; i <= 9; i++)
+			blackPos = HereAgentBlack::searchMove(i).first;
+		chessBoard[blackPos.x][blackPos.y] = black; remainBlank--; timeStamp++;
+		HereAgentBlack::makeMove(blackPos, HereAgentBlack::agent);
+		HereAgentWhite::makeMove(blackPos, HereAgentWhite::user);
+		if (winner = gameover()) {
+			if (winner == black) blackWin++;
+			Print(1, blackWin, whiteWin, blackName, whiteName, blank);
+			printf("黑胜\n");
+			break;
+		}
+
+		Print(1, blackWin, whiteWin, blackName, whiteName, white);
+		point whitePos = HereAgentWhite::searchMove().first;
+		/*point whitePos;
+		for (int i = 1; i <= 9; i++)
+			whitePos = HereAgentWhite::searchMove(i).first;*/
+		chessBoard[whitePos.x][whitePos.y] = white; remainBlank--; timeStamp++;
+		HereAgentWhite::makeMove(whitePos, HereAgentWhite::agent);
+		HereAgentBlack::makeMove(whitePos, HereAgentBlack::user);
+		if (winner = gameover()) {
+			if (winner == white) whiteWin++;
+			Print(1, blackWin, whiteWin, blackName, whiteName, blank);
+			printf("白胜\n");
+			break;
+		}
+	}
+
+	for (int i = 1; i <= 15; i++) {
+		printf("depth = %d，HashMap 平均等效分支因子 = %.3lf，IDSearch 平均等效分支因子 = %.3lf\n",
+			i, HashMap::branchFact[i], IDSearch::branchFact[i]);
 	}
 
 #undef HereAgentBlack

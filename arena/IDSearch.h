@@ -496,6 +496,11 @@ namespace IDSearch {
 	void recordHashMap(int depth, hashFlag flag, int value, point move);
 	std::pair<point, int> idSearch();
 
+	int searchCount = 0;
+
+	double branchFact[20]; // （平均）有效分支因子b：1+b+b^2+...b^d = N（搜索节点数）
+	int branchFactCount[20];
+
 	//搜索的入口函数
 	std::pair<point, int> searchMove()
 	{
@@ -517,6 +522,8 @@ namespace IDSearch {
 		if (hashResult.second != hashUnknowValue) {
 			return hashResult;
 		}
+
+		searchCount++;
 
 		//搜索深度达到上限时，评估局面并返回
 		if (depth == 0) {
@@ -619,9 +626,16 @@ namespace IDSearch {
 		{
 			searchDepth = i;
 			printf("%d ", i);
+			searchCount = 0;
 			res = MiniMax(agent, i, -inf, inf);
+			if (clock() - start_clock >= (clock_t)(TIME_ALLOWED * CLOCKS_PER_SEC)) 
+				break; 
+			else {
+				double b = solveBranchFact(i, searchCount);
+				branchFact[i] = (branchFact[i] * branchFactCount[i] + b) / (branchFactCount[i] + 1);
+				branchFactCount[i]++;
+			}
 			if (res.second >= winValue) return res;
-			if (clock() - start_clock >= (clock_t)(TIME_ALLOWED * CLOCKS_PER_SEC)) break;
 		}
 		return res;
 	}
@@ -724,6 +738,9 @@ namespace IDSearch {
 		createdMoves.clear();
 
 		start_clock = 0;
+
+		cl(branchFact);
+		cl(branchFactCount);
 
 #undef cl
 	}
