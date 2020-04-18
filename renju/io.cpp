@@ -124,6 +124,7 @@ bool readRecord()
 	if (!(ch == 'Y' || ch == 'y')) return false;
 
 	int x, y, cur = black;
+	if (agent == white) zobrist ^= MinFirstValue;
 	while (!fin.eof() && fin.good())
 	{
 		fin >> x >> y;
@@ -133,9 +134,6 @@ bool readRecord()
 			timeStamp++;
 		}
 	}
-
-	if (cur == white) zobrist ^= whiteFirstValue;
-	if (cur != agent) zobrist ^= MinFirstValue;
 
 	return true;
 }

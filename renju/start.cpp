@@ -14,7 +14,7 @@ int main()
 	//读入记录
 	if (!readRecord()) {
 		agent = getTheIntitative(); // 询问先手
-		if (agent == white) zobrist ^= whiteFirstValue;
+		if (agent == white) zobrist ^= MinFirstValue;
 	}
 	user = agent == black ? white : black;
 
