@@ -10,6 +10,7 @@
 using namespace std;
 
 clock_t start_clock;											//开始搜索的时间
+int searchDepth;											// 记录当前搜索的最大深度
 
 //搜索的入口函数
 std::pair<point, int> searchMove()

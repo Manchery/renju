@@ -9,7 +9,6 @@
 #include "hash.h"
 #include <algorithm>
 
-//#define SEARCH_DEPTH (12)										//参考的最大搜索深度
 extern int searchDepth;											// 记录当前搜索的最大深度
 #define TIME_ALLOWED (5.0)										//迭代加深搜索的最长时间限制，单位：秒
 

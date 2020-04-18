@@ -25,10 +25,10 @@ void evaluateHashEffiency();
 // 验证 IDS 的优化效果：等效分支因子更小
 void evaluateIDSearchEfficiency();
 
-#define AgentBlack HashMap
-string blackName("HashMap");
-#define AgentWhite IDSearch
-string whiteName("IDSearch");
+#define AgentBlack IDSearch
+string blackName("IDSearch");
+#define AgentWhite AlphaBeta
+string whiteName("AlphaBeta");
 const int Round = 10;
 // AgentBlack 与 AgentWhite 进行 Round 局对局
 void PK();

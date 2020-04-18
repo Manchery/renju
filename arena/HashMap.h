@@ -485,7 +485,7 @@ namespace HashMap {
 
 	/******************************* searchmove.h **********************************/
 
-	const auto SEARCH_DEPTH = (10);										//参考的最大搜索深度
+	const auto SEARCH_DEPTH = (9);										//参考的最大搜索深度
 
 	std::pair<point, int> MiniMax(int current, int depth, int alpha, int beta);
 	std::pair<point, int> findHashMap(int current, int depth, int alpha, int beta);
