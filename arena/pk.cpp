@@ -6,6 +6,7 @@
 #include <string>
 #include <ctime>
 #include <cassert>
+#include <windows.h>
 using namespace std;
 #define cl(x) memset(x,0,sizeof(x));
 
@@ -17,10 +18,10 @@ void print();
 int gameover();
 void Print(int round, int blackWin, int whiteWin, string blackName, string whiteName, int current);
 
-#define AgentBlack IDSearch
-string blackName("IDSearch");
-#define AgentWhite AlphaBeta
-string whiteName("AlphaBeta");
+#define AgentBlack AlphaBeta
+string blackName("AlphaBeta");
+#define AgentWhite IDSearch
+string whiteName("IDSearch");
 const int Round = 10;
 
 int main() {
@@ -44,6 +45,8 @@ int main() {
 			AgentWhite::makeMove(blackPos, AgentBlack::user);
 			if (winner = gameover()) {
 				if (winner == black) blackWin++;
+				printf("ºÚÊ¤\n");
+				Sleep(10000);
 				break;
 			}
 
@@ -57,6 +60,8 @@ int main() {
 			AgentBlack::makeMove(whitePos, AgentBlack::user);
 			if (winner = gameover()) {
 				if (winner == white) whiteWin++;
+				printf("°×Ê¤\n");
+				Sleep(10000);
 				break;
 			}
 		}
