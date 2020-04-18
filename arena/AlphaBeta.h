@@ -18,6 +18,10 @@ namespace AlphaBeta {
 	using std::make_pair;
 	using std::pair;
 
+	// 啥用也没有，就是为了让 main 的代码格式能统一起来
+	void initHashValue() {}
+	int zobrist, MinFirstValue, whiteFirstValue; 
+
 	/******************************** define.h **************************************/
 
 	int chessBoard[GRID_NUM][GRID_NUM];						//棋盘
@@ -415,10 +419,7 @@ namespace AlphaBeta {
 
 	/******************************* searchmove.h **********************************/
 
-	const auto SEARCH_DEPTH = (10);										//参考的最大搜索深度
-	const auto TIME_ALLOWED = (5.0);
-
-	clock_t start_clock;										//开始搜索的时间
+	const auto SEARCH_DEPTH = (9);										//参考的最大搜索深度
 
 	std::pair<point, int> MiniMax(int current, int depth, int alpha, int beta);
 
@@ -460,7 +461,7 @@ namespace AlphaBeta {
 					{
 						v = newv, optMove = currentMove;
 					}
-					if (v >= beta || clock() - start_clock > (clock_t)(TIME_ALLOWED * CLOCKS_PER_SEC)) {
+					if (v >= beta) {
 						unMakeMove(current);
 						return make_pair(optMove, v);
 					}
@@ -490,7 +491,7 @@ namespace AlphaBeta {
 					{
 						v = newv, optMove = currentMove;
 					}
-					if (v <= alpha || clock() - start_clock > (clock_t)(TIME_ALLOWED * CLOCKS_PER_SEC)) {
+					if (v <= alpha) {
 						unMakeMove(current);
 						return make_pair(optMove, v);
 					}
@@ -515,8 +516,6 @@ namespace AlphaBeta {
 		agent = 0;												//AI扮演的角色(黑棋/白棋)
 		user = 0;												//玩家扮演的角色(与AI相反)
 		timeStamp = 0;											//时间戳（当前棋局步数）
-
-		start_clock = 0;
 
 #undef cl
 	}

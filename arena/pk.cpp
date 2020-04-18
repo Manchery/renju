@@ -16,21 +16,21 @@ void print();
 int gameover();
 void Print(int round, int blackWin, int whiteWin, string blackName, string whiteName, int current);
 
-#define AgentBlack IDSearch
-string blackName("IDSearch");
-#define AgentWhite AlphaBeta
-string whiteName("AlphaBeta");
-const int Round = 20;
+#define AgentBlack AlphaBeta
+string blackName("AlphaBeta");
+#define AgentWhite IDSearch
+string whiteName("IDSearch");
+const int Round = 10;
 
 int main() {
 	int blackWin = 0, whiteWin = 0; int winner;
 	for (int i = 1; i <= Round; i++) {
 		cl(chessBoard); remainBlank = 225;
 		AgentBlack::clearAll(); AgentBlack::initHashValue();
-		AgentWhite::clearAll(); //AgentWhite::initHashValue();
+		AgentWhite::clearAll(); AgentWhite::initHashValue();
 		AgentBlack::agent = AgentWhite::user = black;
 		AgentWhite::agent = AgentBlack::user = white;
-		// AgentWhite::zobrist ^= AgentWhite::MinFirstValue;
+		AgentWhite::zobrist ^= AgentWhite::MinFirstValue;
 		while (true) {
 			Print(i, blackWin, whiteWin, blackName, whiteName, black);
 			point blackPos = AgentBlack::searchMove().first;

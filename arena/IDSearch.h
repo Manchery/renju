@@ -485,8 +485,9 @@ namespace IDSearch {
 
 	/******************************* searchmove.h **********************************/
 
-	const auto SEARCH_DEPTH = (12);										//参考的最大搜索深度
+	//const auto SEARCH_DEPTH = (12);										//参考的最大搜索深度
 	const auto TIME_ALLOWED = (5.0);
+	int searchDepth;
 
 	clock_t start_clock;										//开始搜索的时间
 
@@ -574,7 +575,7 @@ namespace IDSearch {
 				if (makeMove(currentMove, current)) {
 					if (tmpWinner = gameover(currentMove, current))
 						// 考虑玩家是非理性人，算力有限
-						newv = tmpWinner == current ? (-(int)(winValue * pow(0.95, (SEARCH_DEPTH - depth) >> 1))) : 0;
+						newv = tmpWinner == current ? (-(int)(winValue * pow(0.95, (searchDepth - depth) >> 1))) : 0;
 					else
 						newv = MiniMax(opposite(current), depth - 1, alpha, beta).second;
 					if (newv < v)
@@ -613,9 +614,11 @@ namespace IDSearch {
 
 		hashMapClean();
 		//迭代加深搜索，直到耗尽时间
-		for (long long i = startDepth; ; i++)
+		for (int i = startDepth; ; i++)
 		{
+			searchDepth = i;
 			res = MiniMax(agent, i, -inf, inf);
+			printf("%d ", i);
 			if (res.second >= winValue) return res;
 			if (clock() - start_clock >= (clock_t)(TIME_ALLOWED * CLOCKS_PER_SEC)) break;
 		}
