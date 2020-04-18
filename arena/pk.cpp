@@ -18,15 +18,19 @@ void print();
 int gameover();
 void Print(int round, int blackWin, int whiteWin, string blackName, string whiteName, int current);
 
-#define AgentBlack AlphaBeta
-string blackName("AlphaBeta");
+#define AgentBlack HashMap
+string blackName("HashMap");
 #define AgentWhite IDSearch
 string whiteName("IDSearch");
 const int Round = 10;
 
+void evaluateHashEffiency();
+
 int main() {
-	srand(time(0));
+	//evaluateHashEffiency();
+
 	int blackWin = 0, whiteWin = 0; int winner;
+	vector<int> winnerList, timeList;
 	for (int i = 1; i <= Round; i++) {
 		cl(chessBoard); remainBlank = 225;
 		AgentBlack::clearAll(); AgentBlack::initHashValue();
@@ -34,19 +38,25 @@ int main() {
 		AgentBlack::agent = AgentWhite::user = black;
 		AgentWhite::agent = AgentBlack::user = white;
 		AgentWhite::zobrist ^= AgentWhite::MinFirstValue;
+
+		int timeStamp = 0;
 		while (true) {
 			Print(i, blackWin, whiteWin, blackName, whiteName, black);
 			point blackPos = AgentBlack::searchMove().first;
 			if (chessBoard[blackPos.x][blackPos.y] != blank) {
 				cout << "黑方落子非法" << endl; system("pause"); return 0;
 			}
-			chessBoard[blackPos.x][blackPos.y] = black; remainBlank--;
+			chessBoard[blackPos.x][blackPos.y] = black; remainBlank--; timeStamp++;
 			AgentBlack::makeMove(blackPos, AgentBlack::agent);
-			AgentWhite::makeMove(blackPos, AgentBlack::user);
+			AgentWhite::makeMove(blackPos, AgentWhite::user);
 			if (winner = gameover()) {
 				if (winner == black) blackWin++;
+				Print(i, blackWin, whiteWin, blackName, whiteName, blank);
 				printf("黑胜\n");
+				printf("请等待 10 秒\n");
 				Sleep(10000);
+				winnerList.push_back(winner);
+				timeList.push_back(timeStamp);
 				break;
 			}
 
@@ -55,28 +65,92 @@ int main() {
 			if (chessBoard[whitePos.x][whitePos.y] != blank) {
 				cout << "白方落子非法" << endl; system("pause"); return 0;
 			}
-			chessBoard[whitePos.x][whitePos.y] = white; remainBlank--;
-			AgentWhite::makeMove(whitePos, AgentBlack::agent);
+			chessBoard[whitePos.x][whitePos.y] = white; remainBlank--; timeStamp++;
+			AgentWhite::makeMove(whitePos, AgentWhite::agent);
 			AgentBlack::makeMove(whitePos, AgentBlack::user);
 			if (winner = gameover()) {
 				if (winner == white) whiteWin++;
+				Print(i, blackWin, whiteWin, blackName, whiteName, blank);
 				printf("白胜\n");
+				printf("请等待 10 秒\n");
 				Sleep(10000);
+				winnerList.push_back(winner);
+				timeList.push_back(timeStamp);
 				break;
 			}
 		}
 	}
 	printf("对局完毕，黑方已胜:白方已胜:平局 = %d:%d:%d\n", blackWin, whiteWin, Round - blackWin - whiteWin);
+	for (int i = 0; i < Round; i++) {
+		printf("第 %d 局，winner = %s, 双方总步数 = %d\n", i + 1, winnerList[i] == black ? "black" : "white", timeList[i]);
+	}
+
 	system("pause");
 	return 0;
+}
+
+void evaluateHashEffiency() {
+#define HereAgentBlack AlphaBeta
+	string blackName("AlphaBeta");
+#define HereAgentWhite HashMap
+	string whiteName("HashMap");
+
+	const int MAX_DEPTH = 9;
+	int blackWin = 0, whiteWin = 0; int winner;
+	cl(chessBoard); remainBlank = 225;
+	HereAgentBlack::clearAll(); HereAgentBlack::initHashValue();
+	HereAgentWhite::clearAll(); HereAgentWhite::initHashValue();
+	HereAgentBlack::agent = HereAgentWhite::user = black;
+	HereAgentWhite::agent = HereAgentBlack::user = white;
+	HereAgentWhite::zobrist ^= HereAgentWhite::MinFirstValue;
+
+	int timeStamp = 0;
+	while (true) {
+		Print(1, blackWin, whiteWin, blackName, whiteName, black);
+		point blackPos;
+		for (int i = 1; i <= MAX_DEPTH; i++)
+			blackPos = HereAgentBlack::searchMove(i).first;
+		chessBoard[blackPos.x][blackPos.y] = black; remainBlank--; timeStamp++;
+		HereAgentBlack::makeMove(blackPos, HereAgentBlack::agent);
+		HereAgentWhite::makeMove(blackPos, HereAgentWhite::user);
+		if (winner = gameover()) {
+			if (winner == black) blackWin++;
+			Print(1, blackWin, whiteWin, blackName, whiteName, blank);
+			printf("黑胜\n");
+			break;
+		}
+
+		Print(1, blackWin, whiteWin, blackName, whiteName, white);
+		point whitePos;
+		for (int i = 1; i <= MAX_DEPTH; i++)
+			whitePos = HereAgentWhite::searchMove(i).first;
+		chessBoard[whitePos.x][whitePos.y] = white; remainBlank--; timeStamp++;
+		HereAgentWhite::makeMove(whitePos, HereAgentWhite::agent);
+		HereAgentBlack::makeMove(whitePos, HereAgentBlack::user);
+		if (winner = gameover()) {
+			if (winner == white) whiteWin++;
+			Print(1, blackWin, whiteWin, blackName, whiteName, blank);
+			printf("白胜\n");
+			break;
+		}
+	}
+
+	for (int i = 1; i <= MAX_DEPTH; i++) {
+		printf("depth = %d，AlphaBeta 平均等效分支因子 = %.3lf，HashMap 平均等效分支因子 = %.3lf\n",
+			i, AlphaBeta::branchFact[i], HashMap::branchFact[i]);
+	}
+
+#undef HereAgentBlack
+#undef HereAgentWhite
 }
 
 void Print(int round, int blackWin, int whiteWin, string blackName, string whiteName, int current) {
 	system("cls");
 	cout << "黑方：" << blackName << "；白方：" << whiteName << endl;
-	printf("第 %d/%d 局\n黑方已胜:白方已胜:平局 = %d:%d:%d\n", round, Round, blackWin, whiteWin, round - 1 - blackWin - whiteWin);
+	printf("第 %d/%d 局\n黑方已胜:白方已胜:平局 = %d:%d:%d\n", round, Round, blackWin, whiteWin, round - (!!current) - blackWin - whiteWin);
 	print();
-	cout << (current == black ? "黑棋" : "白棋") << "思考中..." << endl;
+	if (current)
+		cout << (current == black ? "黑棋" : "白棋") << "思考中..." << endl;
 }
 
 //生成棋盘形状

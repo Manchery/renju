@@ -19,3 +19,13 @@ bool operator ==(const point& A, const point& B)
 {
 	return A.x == B.x && A.y == B.y;
 }
+
+double solveBranchFact(int d, int N) {
+	double L = 1, R = 100;
+	while (R - L > 1e-4) {
+		double mid = (L + R) / 2;
+		double t = (pow(mid, d + 1) - 1) / (mid - 1);
+		if (t < N) L = mid; else R = mid;
+	}
+	return (L + R) / 2;
+}

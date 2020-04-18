@@ -423,15 +423,28 @@ namespace AlphaBeta {
 
 	std::pair<point, int> MiniMax(int current, int depth, int alpha, int beta);
 
+	int searchCount = 0;
+
+	double branchFact[20]; // （平均）有效分支因子b：1+b+b^2+...b^d = N（搜索节点数）
+	int branchFactCount[20];
+
 	//搜索的入口函数
-	std::pair<point, int> searchMove()
+	std::pair<point, int> searchMove(int depth = SEARCH_DEPTH)
 	{
-		return MiniMax(agent, SEARCH_DEPTH, -inf, inf);
+		printf("搜索深度：%d\n", depth);
+		searchCount = 0;
+		auto result = MiniMax(agent, depth, -inf, inf);
+		double b = solveBranchFact(depth, searchCount);
+		branchFact[depth] = (branchFact[depth] * branchFactCount[depth] + b) / (branchFactCount[depth] + 1);
+		branchFactCount[depth]++;
+		return result;
 	}
 
 	//带alpha-beta剪枝的Minimax搜索算法
 	//current : 当前 player
 	std::pair<point, int> MiniMax(int current, int depth, int alpha, int beta) {
+		searchCount++;
+
 		//搜索深度达到上限时，评估局面并返回
 		if (depth == 0) {
 			int v = Evaluate(current);
@@ -457,7 +470,7 @@ namespace AlphaBeta {
 						newv = tmpWinner == current ? winValue : 0;
 					else
 						newv = MiniMax(opposite(current), depth - 1, alpha, beta).second;
-					if (newv > v || (newv == v && (rand() & 1)))
+					if (newv > v)
 					{
 						v = newv, optMove = currentMove;
 					}
@@ -487,7 +500,7 @@ namespace AlphaBeta {
 						newv = tmpWinner == current ? (-(int)(winValue * pow(0.95, (SEARCH_DEPTH - depth) >> 1))) : 0;
 					else
 						newv = MiniMax(opposite(current), depth - 1, alpha, beta).second;
-					if (newv < v || (newv == v && (rand() & 1)))
+					if (newv < v)
 					{
 						v = newv, optMove = currentMove;
 					}
@@ -516,6 +529,9 @@ namespace AlphaBeta {
 		agent = 0;												//AI扮演的角色(黑棋/白棋)
 		user = 0;												//玩家扮演的角色(与AI相反)
 		timeStamp = 0;											//时间戳（当前棋局步数）
+
+		cl(branchFact);
+		cl(branchFactCount);
 
 #undef cl
 	}
