@@ -18,20 +18,31 @@ void print();
 int gameover();
 void Print(int round, int blackWin, int whiteWin, string blackName, string whiteName, int current);
 
+
+
+// 验证 Hash 的优化效果：等效分支因子更小
+void evaluateHashEffiency();
+// 验证 IDS 的优化效果：等效分支因子更小
+void evaluateIDSearchEfficiency();
+
 #define AgentBlack HashMap
 string blackName("HashMap");
 #define AgentWhite IDSearch
 string whiteName("IDSearch");
 const int Round = 10;
-
-void evaluateHashEffiency();
-void evaluateIDSearchEfficiency();
+// AgentBlack 与 AgentWhite 进行 Round 局对局
+void PK();
 
 int main() {
 	//evaluateHashEffiency();
-	evaluateIDSearchEfficiency();
+	//evaluateIDSearchEfficiency();
+	PK();
+	system("pause");
+	return 0;
+}
 
-	/*int blackWin = 0, whiteWin = 0; int winner;
+void PK() {
+	int blackWin = 0, whiteWin = 0; int winner;
 	vector<int> winnerList, timeList;
 	for (int i = 1; i <= Round; i++) {
 		cl(chessBoard); remainBlank = 225;
@@ -46,7 +57,7 @@ int main() {
 			Print(i, blackWin, whiteWin, blackName, whiteName, black);
 			point blackPos = AgentBlack::searchMove().first;
 			if (chessBoard[blackPos.x][blackPos.y] != blank) {
-				cout << "黑方落子非法" << endl; system("pause"); return 0;
+				cout << "黑方落子非法" << endl; return;
 			}
 			chessBoard[blackPos.x][blackPos.y] = black; remainBlank--; timeStamp++;
 			AgentBlack::makeMove(blackPos, AgentBlack::agent);
@@ -65,7 +76,7 @@ int main() {
 			Print(i, blackWin, whiteWin, blackName, whiteName, white);
 			point whitePos = AgentWhite::searchMove().first;
 			if (chessBoard[whitePos.x][whitePos.y] != blank) {
-				cout << "白方落子非法" << endl; system("pause"); return 0;
+				cout << "白方落子非法" << endl; return;
 			}
 			chessBoard[whitePos.x][whitePos.y] = white; remainBlank--; timeStamp++;
 			AgentWhite::makeMove(whitePos, AgentWhite::agent);
@@ -85,10 +96,7 @@ int main() {
 	printf("对局完毕，黑方已胜:白方已胜:平局 = %d:%d:%d\n", blackWin, whiteWin, Round - blackWin - whiteWin);
 	for (int i = 0; i < Round; i++) {
 		printf("第 %d 局，winner = %s, 双方总步数 = %d\n", i + 1, winnerList[i] == black ? "black" : "white", timeList[i]);
-	}*/
-
-	system("pause");
-	return 0;
+	}
 }
 
 void evaluateHashEffiency() {
