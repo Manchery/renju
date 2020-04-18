@@ -614,11 +614,12 @@ namespace IDSearch {
 
 		hashMapClean();
 		//迭代加深搜索，直到耗尽时间
+		printf("迭代深度: ");
 		for (int i = startDepth; ; i++)
 		{
 			searchDepth = i;
-			res = MiniMax(agent, i, -inf, inf);
 			printf("%d ", i);
+			res = MiniMax(agent, i, -inf, inf);
 			if (res.second >= winValue) return res;
 			if (clock() - start_clock >= (clock_t)(TIME_ALLOWED * CLOCKS_PER_SEC)) break;
 		}

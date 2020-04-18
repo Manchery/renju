@@ -457,7 +457,7 @@ namespace AlphaBeta {
 						newv = tmpWinner == current ? winValue : 0;
 					else
 						newv = MiniMax(opposite(current), depth - 1, alpha, beta).second;
-					if (newv > v)
+					if (newv > v || (newv == v && (rand() & 1)))
 					{
 						v = newv, optMove = currentMove;
 					}
@@ -487,7 +487,7 @@ namespace AlphaBeta {
 						newv = tmpWinner == current ? (-(int)(winValue * pow(0.95, (SEARCH_DEPTH - depth) >> 1))) : 0;
 					else
 						newv = MiniMax(opposite(current), depth - 1, alpha, beta).second;
-					if (newv < v)
+					if (newv < v || (newv == v && (rand() & 1)))
 					{
 						v = newv, optMove = currentMove;
 					}

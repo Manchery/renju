@@ -4,6 +4,7 @@
 #include <cstring>
 #include <cstdlib>
 #include <string>
+#include <ctime>
 #include <cassert>
 using namespace std;
 #define cl(x) memset(x,0,sizeof(x));
@@ -16,13 +17,14 @@ void print();
 int gameover();
 void Print(int round, int blackWin, int whiteWin, string blackName, string whiteName, int current);
 
-#define AgentBlack AlphaBeta
-string blackName("AlphaBeta");
-#define AgentWhite IDSearch
-string whiteName("IDSearch");
+#define AgentBlack IDSearch
+string blackName("IDSearch");
+#define AgentWhite AlphaBeta
+string whiteName("AlphaBeta");
 const int Round = 10;
 
 int main() {
+	srand(time(0));
 	int blackWin = 0, whiteWin = 0; int winner;
 	for (int i = 1; i <= Round; i++) {
 		cl(chessBoard); remainBlank = 225;
@@ -59,6 +61,7 @@ int main() {
 			}
 		}
 	}
+	printf("对局完毕，黑方已胜:白方已胜:平局 = %d:%d:%d\n", blackWin, whiteWin, Round - blackWin - whiteWin);
 	system("pause");
 	return 0;
 }
