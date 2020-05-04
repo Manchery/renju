@@ -31,6 +31,7 @@ string blackName("IDSearch");
 string whiteName("AlphaBeta");
 const int Round = 10;
 // AgentBlack 与 AgentWhite 进行 Round 局对局
+// 请保证 AgentBlack 与 AgentWhite 不同
 void PK();
 
 int main() {
