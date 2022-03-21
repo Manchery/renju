@@ -1,5 +1,7 @@
 # Renju 源代码
 
+**2020春《人工智能导论》大作业 五子棋AI**
+
 IDE：Visual Studio 2019
 
 请尽量在 Release x86 模式下编译运行
